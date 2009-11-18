@@ -1,0 +1,15 @@
+h2. Scala hack-a-thon 公開資料
+
+これは、Scala hack-a-thonで使用する資料です。
+
+この資料は、reStructuredText(reST)で記述され、Sphinxによって生成されています。
+
+Sphinx:
+  http://sphinx.pocoo.org/
+  http://sphinx.shibu.jp/index.html
+
+
+-----
+ゆろよろ Tomohito Ozaki
+# blog   : http://d.hatena.ne.jp/yuroyoro/
+# twitter: http://twitter.com/yuroyoro/
