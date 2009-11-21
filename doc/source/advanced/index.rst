@@ -12,5 +12,6 @@ Contents:
    structual_subtyping.rst
    xml.rst
    actor.rst
+   loanpattern.rst
 
 

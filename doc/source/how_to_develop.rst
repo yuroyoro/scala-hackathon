@@ -65,7 +65,7 @@ Scalaのアプリケーションとして実行時に指定するオブジェク
 
 .. code-block:: console
 
-  $ scala HelloWorld.scala
+  $ scalac HelloWorld.scala
   $ scala HelloWorld foo bar baz
 
 

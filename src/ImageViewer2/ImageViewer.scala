@@ -8,9 +8,7 @@ import javax.imageio.ImageIO
 import scala.collection.jcl.Conversions._
 
 object ImageViewer extends Application{
-
   private val w = new ThumbWindow
-
 }
 
 class ThumbWindow extends JFrame{
@@ -41,7 +39,6 @@ class ThumbWindow extends JFrame{
     label.setSize(100, 100)
 
     label.addMouseListener( new MouseAdapter(){
-      val imageFile = f
       override def mouseClicked(e:MouseEvent){
         new ViewWindow( f )
       }

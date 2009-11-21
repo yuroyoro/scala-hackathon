@@ -16,7 +16,7 @@ Contents:
    basic/index.rst
    advanced/index.rst
    practice/index.rst
-   sample_application.rst
+   sample/index.rst
    misc/index.rst
 
 Indices and tables

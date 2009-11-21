@@ -23,25 +23,28 @@ Scalaの変数には、再代入できない(Javaでのfinal宣言に該当す�
 Scalaの型階層
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Scalaでは、全ての型はオブジェクトです。Javaでは、プリミティブ型とオブジェクト型が区別されていますが、Scalaでは数値型もオブジェクトとして扱えますので、数値に対してメソッドを呼び出すことが可能です。
+Scalaでは、全ての型はオブジェクトです。Javaでは、プリミティブ型とオブジェクト型が区別されていますが、Scalaでは値型もオブジェクトとして扱えますので、数値に対してメソッドを呼び出すことが可能です。
 
 全て型のTopレベルは、Any型になります。Scalaでは、数値も文字列もコレクションもユーザー定義のクラスも、全てAny型のサブクラスになります。
 
-Scalaで用意されている型には、数値型と参照型があります。
+Scalaで用意されている型には、値型(AnyVal)と参照型(AnyRef)があります。
 
-数値型は、プリミティブ型に相当するクラスで，整数(Byte，Short，Char，Int，Long)や浮動小数点を表す(Float，Double)クラスが用意されています。これらの数値型は、AnyVal型を継承しています。
+値型(AnyVal)は、プリミティブ型に相当するクラスで，真偽値(Boolean)や整数(Byte，Short，Char，Int，Long)や浮動小数点を表す(Float，Double)クラスが用意されています。これらの値型は、AnyVal型を継承しています。Javaのvoid型に相当するUnit型も、値型(AnyRef)のサブクラスです。
 
-参照型は、java.lang.Objectに相当し、文字列(String)やListやMapなどが該当します。参照型は、全てAnyRef型のサブクラスとなります。
+参照型(AnyRef)は、java.lang.Objectに相当し、文字列(String)やListやMapなどが該当します。参照型は、全てAnyRef型のサブクラスとなります。
 
 これらの型階層をまとめると、以下のようになります。
 
 .. code-block:: console
 
   Any                 全ての型のスーパークラス
-   |- AnyVal          数値型のスーパークラス
+   |- AnyVal          値型のスーパークラス
    |   |- Short
    |   |- Int
+   |   |- Float
    |   |- Double
+   |   |- Boolean
+   |   |- Unit
    |   |- ...
    |
    |- AnyRef          参照型のスーパークラス
@@ -88,9 +91,21 @@ Array型は、要素の型を型パラメータ(後述します)に取ります�
 
 RichWrapper、よく使う型
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-一般的な数値型と文字列型は、Javaのプリミティブ型を機能強化したラッパー型が用意されています。
+一般的な値型と文字列型は、Javaのプリミティブ型を機能強化したラッパー型が用意されています。
 
-RichIntやRichStringなど、それぞれの型に"Rich"を先頭に付与した名前になっています。これらのRichWrapperは、デフォルトでimportされるため、特にimportを指定しなくとも利用することができます。
+RichIntやRichStringなど、それぞれの型に"Rich"を先頭に付与した名前になっています。これらのRichWrapperは、RichWrapperが持つ関数を呼び出したタイミングで、適切に変換される(implicit conversion)ため、特に意識しなくとも利用することができます。
+
+例えば、RichStringには、文字列を反転させるreverseという関数があります。String型のオブジェクトに対してこのreverse関数を呼び出すと、RichStringに変換されて実行されます。
+
+.. code-block:: scala
+
+  scala> val s = "AbCdE"
+  s: java.lang.String = AbCdE
+
+  scala> s.reverse
+  res2: scala.runtime.RichString = EdCbA
+
+
 
 上記のRichWrapperに加え、Listなどのコレクション型も含め、よく使う型を以下の表にまとめておきます。
 
@@ -113,7 +128,7 @@ if文は、通常のプログラミング言語と同じように書くことが
 
   if( 条件 ){ 真の時の処理 } else { 偽の時の処理 }
 
-条件に指定する式は、Boolean型に評価される者である必要があります。例えばPythonのように、条件に空のリストを指定したりすることはできません。
+条件に指定する式は、Boolean型に評価されるものである必要があります。例えばPythonのように、条件に空のリストを指定したりすることはできません。
 
 条件につづく処理は、一行に収まるような場合は{}を省略することができます。
 

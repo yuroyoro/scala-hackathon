@@ -1,4 +1,5 @@
 import java.io.{File,FileFilter }
+   echoserver.rst
 import java.awt.{Image,FlowLayout }
 import java.awt.image.BufferedImage
 import javax.swing.{ImageIcon, JWindow, JLabel}
@@ -7,21 +8,20 @@ import javax.imageio.ImageIO
 import scala.collection.jcl.Conversions._
 
 object ImageViewer extends Application{
+  val filePattern  = """.*\.(png|jpg|gif)$""".r
+
+  def imageFiles( dir:File ) = dir.listFiles{
+    new FileFilter{
+      def accept( f:File ) = f.getName match {
+        case filePattern( _ ) => true
+        case _ => false
+      }
+    }
+  }
 
   private val w = new JWindow {
     import java.awt.Toolkit
     import java.awt.event._
-
-    val filePattern  = """.*\.(png|jpg|gif)$""".r
-
-    def imageFiles( dir:File ) = dir.listFiles{
-      new FileFilter{
-        def accept( f:File ) = f.getName match {
-          case filePattern( _ ) => true
-          case _ => false
-        }
-      }
-    }
 
     val pane = getContentPane
     pane.setLayout( new FlowLayout() )
