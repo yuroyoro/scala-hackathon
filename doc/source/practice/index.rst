@@ -1,6 +1,8 @@
 実践 Scala
 ================================================
 
+実際にScalaのコードを書くときに、役に立つTipsを紹介します。
+
 Contents:
 
 .. toctree::
@@ -10,5 +12,6 @@ Contents:
    option.rst
    gui.rst
    networing.rst
+   loanpattern.rst
 
 
