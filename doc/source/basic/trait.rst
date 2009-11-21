@@ -97,6 +97,7 @@ Scalaでは、このダイヤモンド継承問題に対して、Mix-inという
 では、早速実行してみましょう。どうなるでしょうか?
 
 .. code-block:: scala
+
   scala> (new C).m
   res28: String = B
 
@@ -144,7 +145,7 @@ scala>   class C extends A with B with T
  of the mixin trait B
          class C extends A with B with T
 
-これは、AとBの継承先のクラスが異なるためです。
+これは、AとBの継承先のクラスが異なるためです。ここで、クラスTが抽象クラスではなく、traitになっている場合はエラーは発生しません。あくまで、具象クラスまたは抽象クラスを継承するtraitの場合です。
 
 まとめると、こうなります。
 

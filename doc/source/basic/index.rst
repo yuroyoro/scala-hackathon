@@ -18,5 +18,6 @@ Contents:
    function.rst
    classes.rst
    trait.rst
+   import.rst
    patternmatching.rst
 
