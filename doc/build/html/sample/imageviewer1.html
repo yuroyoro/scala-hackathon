@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6.1.1. サムネイル表示までを作成する &mdash; Scala hack-a-thon #1 v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Scala hack-a-thon #1 v1.0 documentation" href="../index.html" />
+    <link rel="up" title="6.1. シンプルな画像ビューワー" href="imageviewer.html" />
+    <link rel="next" title="6.1.2. クリックすると画像表示ウィンドウを表示させる" href="imageviewer2.html" />
+    <link rel="prev" title="6.1. シンプルな画像ビューワー" href="imageviewer.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="imageviewer2.html" title="6.1.2. クリックすると画像表示ウィンドウを表示させる"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imageviewer.html" title="6.1. シンプルな画像ビューワー"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Scala hack-a-thon #1 v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >6. サンプルアプリケーション</a> &raquo;</li>
+          <li><a href="imageviewer.html" accesskey="U">6.1. シンプルな画像ビューワー</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">6.1.1. サムネイル表示までを作成する</a><ul>
+<li><a class="reference external" href="#application">6.1.1.1. Applicationトレイトを利用する</a></li>
+<li><a class="reference external" href="#id2">6.1.1.2. ディレクトリ内の画像ファイルを検索する</a></li>
+<li><a class="reference external" href="#id3">6.1.1.3. ウィンドウを表示させる</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="imageviewer.html"
+                                  title="previous chapter">6.1. シンプルな画像ビューワー</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="imageviewer2.html"
+                                  title="next chapter">6.1.2. クリックすると画像表示ウィンドウを表示させる</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/sample/imageviewer1.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>6.1.1. サムネイル表示までを作成する<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>では、まずはディレクトリ内の画像ファイルを検索して、サムネイルが表示されるまでを実装してみます。</p>
+<div class="section" id="application">
+<h2>6.1.1.1. Applicationトレイトを利用する<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h2>
+<p>アプリケーションにはmain関数が必要ですが、毎回定義するのは面倒ですよね。Scalaには、Applicationトレイトというものが用意されており、これを利用するとmain関数を書かなくてもクラス内に記述した処理をmainとして実行してくれます。</p>
+<p>ただ、Applicationトレイトには、起動時の引数を受け取ることは出来ないため、引数をとるアプリケーションは通常通りmain関数を定義する必要があります。</p>
+<p>では、早速ソースファイルの作成に入りましょう。ファイル名は、まぁなんでもいんですけどとりあえずImageViewer.scalaにしておきます。</p>
+<div class="highlight-scala"><div class="highlight"><pre>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>object ImageViewer extends Application{</dt>
+<dd>println( &#8220;Image Viewer &#8221; )</dd>
+</dl>
+<p>}</p>
+<p>ここまで、コンパイルして実行すると、メッセージが表示されるはずです。</p>
+</div>
+<div class="section" id="id2">
+<h2>6.1.1.2. ディレクトリ内の画像ファイルを検索する<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>では、ディレクトリ内の画像ファイルを検索する処理を実装しましょう。
+このアプリケーションでは、起動したディレクトリのなかの&#8221;images&#8221;ディレクトリ内から画像を検索することにします。</p>
+<p>Javaでは、ディレクトリ内のファイル一覧を取得するには、java.io.File$listFilesを利用します。
+インタプリタで動作を確認してみましょう。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">java.io.File</span>
+<span class="k">import</span> <span class="nn">java.io.File</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">dir</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span> <span class="s">&quot;./images&quot;</span><span class="o">)</span>
+<span class="n">dir</span><span class="k">:</span> <span class="kt">java.io.File</span> <span class="o">=</span> <span class="o">./</span><span class="n">images</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">dir</span><span class="o">.</span><span class="n">listFiles</span>
+<span class="n">res0</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">java.io.File</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(./</span><span class="n">images</span><span class="o">/.</span><span class="nc">DS_Store</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mi">010</span><span class="o">-</span><span class="mf">7.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mf">011.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mi">012</span><span class="o">-</span><span class="mf">4.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mf">017.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mi">022</span><span class="o">-</span><span class="mf">6.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mi">20070823</span><span class="n">miku</span><span class="o">.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mf">2007112815.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mf">20091010600009.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mf">200910121500006.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mi">2</span><span class="n">a2d5252</span><span class="o">.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mf">317307.</span><span class="n">png</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mf">318077.</span><span class="n">png</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mi">611</span><span class="n">fd5ae</span><span class="o">.</span><span class="n">jpg</span><span class="o">,</span>  <span class="o">./</span><span class="n">images</span><span class="o">/</span><span class="mi">6</span><span class="n">a00d4142a45c73c7f00cd973dd59</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>ファイルの一覧が取れましたね。ただ、このままでは画像ファイル以外も取得できてしまうため、画像ファイルだけ抽出する必要があります。</p>
+<p>ここでは、拡張子が&#8221;jpg&#8221;, &#8220;png&#8221;, &#8220;gif&#8221;のいずれかであれば、画像ファイルと見なすことにします。</p>
+<p>単純にString#endsWith関数で判断してもよいのですが、3回or判定をしなければ行けないのでメンドイですね。正規表現でマッチさせることにしましょう。</p>
+<p>Scalaでは、java.util.regexをラップしたscala.util.matching.Regexという便利なクラスがあります。
+Scalaでの具体的な性器表現の使い方を見ましょう。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">filePattern</span>  <span class="k">=</span> <span class="s">&quot;&quot;&quot;.*\.(png|jpg|gif)$&quot;&quot;&quot;</span><span class="o">.</span><span class="n">r</span>
+<span class="n">filePattern</span><span class="k">:</span> <span class="kt">scala.util.matching.Regex</span> <span class="o">=</span> <span class="o">.*\.(</span><span class="n">png</span><span class="o">|</span><span class="n">jpg</span><span class="o">|</span><span class="n">gif</span><span class="o">)</span><span class="n">$</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="s">&quot;test.png&quot;</span> <span class="k">match</span> <span class="o">{</span>
+     <span class="o">|</span>   <span class="k">case</span> <span class="n">filePattern</span><span class="o">(</span> <span class="k">_</span> <span class="o">)</span> <span class="k">=&gt;</span> <span class="s">&quot;ok&quot;</span>
+     <span class="o">|</span>   <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="s">&quot;ng&quot;</span>
+     <span class="o">|</span> <span class="o">}</span>
+<span class="n">res1</span><span class="k">:</span> <span class="kt">java.lang.String</span> <span class="o">=</span> <span class="n">ok</span>
+</pre></div>
+</div>
+<p>シングルクォートを3つつづけて&#8221;&#8220;&#8221;Fooo&#8221;&#8220;&#8221;のようにかくと、ヒアドキュメントとして文字列を定義できます。&#8221;&#8220;&#8221;内では改行も自由自在ですし、(バックスラッシュ)をエスケープする必要もないので、正規表現を記述するにはもってこいです。</p>
+<p>で、正規表現を書いた文字列に.r関数を呼び出すことで、scala.util.matching.Regexオブジェクトを取得できます。</p>
+<p>Regexオブジェクトはパターンマッチで利用できますので、case filePattern(_) =&gt; &#8220;ok&#8221; はマッチした時に実行されます。filePattern( _ )の(_)は、正規表現内のグループに対応しています。ここでは、グループ(例では拡張子が入る)の内容は使わないので&#8221;_&#8221;で受けていますが、filePattern( ext ) =&gt;print(ext)のように書くと、正規表現内のグループの内容が変数extに入ります。</p>
+<p>では、ImageViewに画像ファイルだけ検索する関数を実装してみます。File#listFilesには、java.io.FileFilterインターフェースを実装したインスタンスを渡すことで、一覧にフィルターを書けることが出来ます。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">import</span> <span class="nn">java.io.</span><span class="o">{</span><span class="nc">File</span><span class="o">,</span><span class="nc">FileFilter</span> <span class="o">}</span>
+
+<span class="k">object</span> <span class="nc">ImageViewer</span> <span class="k">extends</span> <span class="nc">Application</span><span class="o">{</span>
+    <span class="k">val</span> <span class="n">filePattern</span>  <span class="k">=</span> <span class="s">&quot;&quot;&quot;.*\.(png|jpg|gif)$&quot;&quot;&quot;</span><span class="o">.</span><span class="n">r</span>
+
+    <span class="k">def</span> <span class="n">imageFiles</span><span class="o">(</span> <span class="n">dir</span><span class="k">:</span><span class="kt">File</span> <span class="o">)</span> <span class="k">=</span> <span class="n">dir</span><span class="o">.</span><span class="n">listFiles</span><span class="o">{</span>
+      <span class="k">new</span> <span class="nc">FileFilter</span><span class="o">{</span>
+        <span class="k">def</span> <span class="n">accept</span><span class="o">(</span> <span class="n">f</span><span class="k">:</span><span class="kt">File</span> <span class="o">)</span> <span class="k">=</span> <span class="n">f</span><span class="o">.</span><span class="n">getName</span> <span class="k">match</span> <span class="o">{</span>
+          <span class="k">case</span> <span class="n">filePattern</span><span class="o">(</span> <span class="k">_</span> <span class="o">)</span> <span class="k">=&gt;</span> <span class="kc">true</span>
+          <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="kc">false</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+ <span class="o">}</span>
+</pre></div>
+</div>
+<p>これで画像ファイルのみ取り出すことができるようになりました。</p>
+</div>
+<div class="section" id="id3">
+<h2>6.1.1.3. ウィンドウを表示させる<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>では、GUIを使ってウィンドウを表示しましょう。ここでは、javax.swing.JWindowを使います。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">import</span> <span class="nn">java.io.</span><span class="o">{</span><span class="nc">File</span><span class="o">,</span> <span class="nc">FileFilter</span> <span class="o">}</span>
+<span class="k">import</span> <span class="nn">javax.swing.</span><span class="o">{</span> <span class="nc">JWindow</span> <span class="o">}</span>
+
+<span class="k">object</span> <span class="nc">ImageViewer</span> <span class="k">extends</span> <span class="nc">Application</span><span class="o">{</span>
+
+  <span class="k">val</span> <span class="n">filePattern</span>  <span class="k">=</span> <span class="s">&quot;&quot;&quot;.*\.(png|jpg|gif)$&quot;&quot;&quot;</span><span class="o">.</span><span class="n">r</span>
+
+  <span class="k">def</span> <span class="n">imageFiles</span><span class="o">(</span> <span class="n">dir</span><span class="k">:</span><span class="kt">File</span> <span class="o">)</span> <span class="k">=</span> <span class="n">dir</span><span class="o">.</span><span class="n">listFiles</span><span class="o">{</span>
+    <span class="k">new</span> <span class="nc">FileFilter</span><span class="o">{</span>
+      <span class="k">def</span> <span class="n">accept</span><span class="o">(</span> <span class="n">f</span><span class="k">:</span><span class="kt">File</span> <span class="o">)</span> <span class="k">=</span> <span class="n">f</span><span class="o">.</span><span class="n">getName</span> <span class="k">match</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="n">filePattern</span><span class="o">(</span> <span class="k">_</span> <span class="o">)</span> <span class="k">=&gt;</span> <span class="kc">true</span>
+        <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="kc">false</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="k">private</span> <span class="k">val</span> <span class="n">w</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">JWindow</span> <span class="o">{</span>
+    <span class="k">import</span> <span class="nn">java.awt.Toolkit</span>
+    <span class="k">import</span> <span class="nn">java.awt.event._</span>
+
+    <span class="n">addMouseListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">MouseAdapter</span><span class="o">(){</span>
+      <span class="k">override</span> <span class="k">def</span> <span class="n">mouseClicked</span><span class="o">(</span><span class="n">e</span><span class="k">:</span><span class="kt">MouseEvent</span><span class="o">){</span> <span class="nc">System</span><span class="o">.</span><span class="n">exit</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="o">}</span>
+    <span class="o">})</span>
+
+    <span class="n">setSize</span><span class="o">(</span> <span class="mi">640</span><span class="o">,</span> <span class="mi">420</span><span class="o">)</span>
+    <span class="n">setVisible</span><span class="o">(</span> <span class="kc">true</span> <span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>ブランクのウィンドウが表示され、クリックすると終了しましたね。では、先ほど実装した画像ファイルの一覧から、サムネイルを作る処理を実装します。</p>
+<p>listFiles関数で取得できるのは、JavaのFile型の配列オブジェクトで、ScalaのArray型ではありません。生のJavaの配列は扱いにくいので、ScalaのArray型に変換することにします。</p>
+<p>やり方は簡単で、&#8221;import scala.collection.jcl.Conversions._&#8221;とimportを書くだけです。これだけで、Javaの配列やListやMapは、Scalaのコレクションに変換されます。</p>
+<p>これは、Conversionsオブジェクトがimplict conversionを用いてコレクション型への変換を行うためです。</p>
+<p>さて、imageFilesで取得したファイル一覧に対して、サムネイル画像を作ってウィンドウに追加する処理にはいります。imageFilesの結果を、foreachで処理すると良さそうです。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">imageFiles</span><span class="o">(</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span> <span class="s">&quot;./images&quot;</span> <span class="o">)</span> <span class="o">).</span><span class="n">foreach</span><span class="o">{</span> <span class="n">f</span> <span class="k">=&gt;</span>
+
+  <span class="k">def</span> <span class="n">createThumb</span><span class="o">(</span> <span class="n">image</span><span class="k">:</span><span class="kt">BufferedImage</span> <span class="o">)</span> <span class="k">=</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">getScaledInstance</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span><span class="mi">100</span><span class="o">,</span> <span class="nc">Image</span><span class="o">.</span><span class="nc">SCALE_AREA_AVERAGING</span><span class="o">)</span>
+
+  <span class="k">val</span> <span class="n">icon</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ImageIcon</span>
+  <span class="k">val</span> <span class="n">image</span> <span class="k">=</span> <span class="nc">ImageIO</span><span class="o">.</span><span class="n">read</span><span class="o">(</span> <span class="n">f</span> <span class="o">)</span>
+  <span class="n">icon</span><span class="o">.</span><span class="n">setImage</span><span class="o">(</span> <span class="n">createThumb</span><span class="o">(</span> <span class="n">image</span><span class="o">)</span> <span class="o">)</span>
+  <span class="k">val</span> <span class="n">label</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">JLabel</span><span class="o">(</span> <span class="n">icon</span> <span class="o">)</span>
+  <span class="n">label</span><span class="o">.</span><span class="n">setSize</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">)</span>
+  <span class="n">pane</span><span class="o">.</span><span class="n">add</span><span class="o">(</span> <span class="n">label</span> <span class="o">)</span>
+
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>foreachの中で、ファイルからBufferedImageとして画像を読み込んで、ImageIconを作ってJLabelに追加しています。サムネイルを作る処理は、BufferedImage#getScaledInstanceで作成できますので、これを利用しています。</p>
+<p>以下が、完成したソースコードです。これをコンパイルして実行すると、サムネイルが表示されたウィンドウが出るはずです。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">import</span> <span class="nn">java.io.</span><span class="o">{</span><span class="nc">File</span><span class="o">,</span> <span class="nc">FileFilter</span> <span class="o">}</span>
+<span class="k">import</span> <span class="nn">java.awt.</span><span class="o">{</span><span class="nc">Image</span><span class="o">,</span> <span class="nc">FlowLayout</span> <span class="o">}</span>
+<span class="k">import</span> <span class="nn">java.awt.image.BufferedImage</span>
+<span class="k">import</span> <span class="nn">javax.swing.</span><span class="o">{</span><span class="nc">ImageIcon</span><span class="o">,</span>  <span class="nc">JWindow</span><span class="o">,</span>  <span class="nc">JLabel</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">javax.imageio.ImageIO</span>
+
+<span class="k">import</span> <span class="nn">scala.collection.jcl.Conversions._</span>
+
+<span class="k">object</span> <span class="nc">ImageViewer</span> <span class="k">extends</span> <span class="nc">Application</span><span class="o">{</span>
+
+  <span class="k">val</span> <span class="n">filePattern</span>  <span class="k">=</span> <span class="s">&quot;&quot;&quot;.*\.(png|jpg|gif)$&quot;&quot;&quot;</span><span class="o">.</span><span class="n">r</span>
+
+  <span class="k">def</span> <span class="n">imageFiles</span><span class="o">(</span> <span class="n">dir</span><span class="k">:</span><span class="kt">File</span> <span class="o">)</span> <span class="k">=</span> <span class="n">dir</span><span class="o">.</span><span class="n">listFiles</span><span class="o">{</span>
+    <span class="k">new</span> <span class="nc">FileFilter</span><span class="o">{</span>
+      <span class="k">def</span> <span class="n">accept</span><span class="o">(</span> <span class="n">f</span><span class="k">:</span><span class="kt">File</span> <span class="o">)</span> <span class="k">=</span> <span class="n">f</span><span class="o">.</span><span class="n">getName</span> <span class="k">match</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="n">filePattern</span><span class="o">(</span> <span class="k">_</span> <span class="o">)</span> <span class="k">=&gt;</span> <span class="kc">true</span>
+        <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="kc">false</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="k">private</span> <span class="k">val</span> <span class="n">w</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">JWindow</span> <span class="o">{</span>
+    <span class="k">import</span> <span class="nn">java.awt.Toolkit</span>
+    <span class="k">import</span> <span class="nn">java.awt.event._</span>
+
+    <span class="k">val</span> <span class="n">pane</span> <span class="k">=</span> <span class="n">getContentPane</span>
+    <span class="n">pane</span><span class="o">.</span><span class="n">setLayout</span><span class="o">(</span> <span class="k">new</span> <span class="nc">FlowLayout</span><span class="o">()</span> <span class="o">)</span>
+
+    <span class="n">imageFiles</span><span class="o">(</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span> <span class="s">&quot;./images&quot;</span> <span class="o">)</span> <span class="o">).</span><span class="n">foreach</span><span class="o">{</span> <span class="n">f</span> <span class="k">=&gt;</span>
+
+      <span class="k">def</span> <span class="n">createThumb</span><span class="o">(</span> <span class="n">image</span><span class="k">:</span><span class="kt">BufferedImage</span> <span class="o">)</span> <span class="k">=</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">getScaledInstance</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span><span class="mi">100</span><span class="o">,</span> <span class="nc">Image</span><span class="o">.</span><span class="nc">SCALE_AREA_AVERAGING</span><span class="o">)</span>
+
+      <span class="k">val</span> <span class="n">icon</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ImageIcon</span>
+      <span class="k">val</span> <span class="n">image</span> <span class="k">=</span> <span class="nc">ImageIO</span><span class="o">.</span><span class="n">read</span><span class="o">(</span> <span class="n">f</span> <span class="o">)</span>
+      <span class="n">icon</span><span class="o">.</span><span class="n">setImage</span><span class="o">(</span> <span class="n">createThumb</span><span class="o">(</span> <span class="n">image</span><span class="o">)</span> <span class="o">)</span>
+      <span class="k">val</span> <span class="n">label</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">JLabel</span><span class="o">(</span> <span class="n">icon</span> <span class="o">)</span>
+      <span class="n">label</span><span class="o">.</span><span class="n">setSize</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">)</span>
+      <span class="n">pane</span><span class="o">.</span><span class="n">add</span><span class="o">(</span> <span class="n">label</span> <span class="o">)</span>
+
+    <span class="o">}</span>
+
+    <span class="n">addMouseListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">MouseAdapter</span><span class="o">(){</span>
+      <span class="k">override</span> <span class="k">def</span> <span class="n">mouseClicked</span><span class="o">(</span><span class="n">e</span><span class="k">:</span><span class="kt">MouseEvent</span><span class="o">){</span> <span class="nc">System</span><span class="o">.</span><span class="n">exit</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="o">}</span>
+    <span class="o">})</span>
+
+    <span class="n">setSize</span><span class="o">(</span> <span class="mi">640</span><span class="o">,</span> <span class="mi">420</span><span class="o">)</span>
+    <span class="n">setVisible</span><span class="o">(</span> <span class="kc">true</span> <span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="imageviewer2.html" title="6.1.2. クリックすると画像表示ウィンドウを表示させる"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imageviewer.html" title="6.1. シンプルな画像ビューワー"
+             >previous</a> |</li>
+        <li><a href="../index.html">Scala hack-a-thon #1 v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >6. サンプルアプリケーション</a> &raquo;</li>
+          <li><a href="imageviewer.html" >6.1. シンプルな画像ビューワー</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Tomohito Ozaki.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

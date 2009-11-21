@@ -1,0 +1,566 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3.2. 関数編 &mdash; Scala hack-a-thon #1 v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Scala hack-a-thon #1 v1.0 documentation" href="../index.html" />
+    <link rel="up" title="3. Scalaの基本" href="index.html" />
+    <link rel="next" title="3.3. クラス、オブジェクト、トレイト" href="classes.html" />
+    <link rel="prev" title="3.1. 基本的な文法" href="basic.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classes.html" title="3.3. クラス、オブジェクト、トレイト"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="basic.html" title="3.1. 基本的な文法"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Scala hack-a-thon #1 v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">3. Scalaの基本</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">3.2. 関数編</a><ul>
+<li><a class="reference external" href="#id2">3.2.1. 関数の呼び出し</a></li>
+<li><a class="reference external" href="#id3">3.2.2. ファーストクラス関数</a></li>
+<li><a class="reference external" href="#id4">3.2.3. 関数の&#8221;型&#8221;</a></li>
+<li><a class="reference external" href="#id5">3.2.4. 関数を引数に取る関数</a></li>
+<li><a class="reference external" href="#id6">3.2.5. 関数リテラル</a></li>
+<li><a class="reference external" href="#id7">3.2.6. 引数のプレースホルダー</a></li>
+<li><a class="reference external" href="#id8">3.2.7. 高階関数とクロージャ</a><ul>
+<li><a class="reference external" href="#id9">3.2.7.1. 「関数を生成する」関数</a></li>
+<li><a class="reference external" href="#id10">3.2.7.2. クロージャ</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#id11">3.2.8. ネストした関数</a></li>
+<li><a class="reference external" href="#id12">3.2.9. 再帰する関数</a><ul>
+<li><a class="reference external" href="#scala">3.2.9.1. Scalaでの再帰関数</a></li>
+<li><a class="reference external" href="#id13">3.2.9.2. 末尾再帰による最適化</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#id14">3.2.10. 部分適用とカリー化</a><ul>
+<li><a class="reference external" href="#id15">3.2.10.1. 部分適用された関数</a></li>
+<li><a class="reference external" href="#id16">3.2.10.2. カリー化</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#id17">3.2.11. 可変長引数</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="basic.html"
+                                  title="previous chapter">3.1. 基本的な文法</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="classes.html"
+                                  title="next chapter">3.3. クラス、オブジェクト、トレイト</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/basic/function.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>3.2. 関数編<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Scalaの関数は、ファーストクラス関数です。関数オブジェクトを変数に代入したり、&#8221;関数を生成する関数&#8221;(高階関数)を定義したり、クロージャとして利用することができます。</p>
+<p>関数の宣言については先ほど説明しましたので、具体的にScalaの関数が持つ強力な機能をこれから紹介します。</p>
+<div class="section" id="id2">
+<h2>3.2.1. 関数の呼び出し<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Scalaで関数を呼び出すには、Javaなどと同じように、関数を持っているオブジェクトに.(ドット)をつけて呼び出します。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">s</span> <span class="k">=</span> <span class="s">&quot;Foo&quot;</span>
+<span class="n">s</span><span class="k">:</span> <span class="kt">java.lang.String</span> <span class="o">=</span> <span class="nc">Foo</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="n">res16</span><span class="k">:</span> <span class="kt">Char</span> <span class="o">=</span> <span class="n">F</span>
+</pre></div>
+</div>
+<p>引数を取らない関数を呼び出す場合、()を省略できます。ただし関数の宣言でdef foo = {...}のように予め()なしで宣言されている関数を呼び出すときには、()をつけて呼び出すとエラーになります。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span><span class="o">()</span>
+<span class="n">res17</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span>
+<span class="n">res18</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>引数なしまたは1引数の関数を呼び出す場合、.(ドット)の変わりにスペースを利用することができます。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span><span class="o">()</span>
+<span class="n">res17</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span> <span class="n">length</span>
+<span class="n">res19</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>１引数の関数を呼び出す場合、引数の指定で()を利用する変わりに、スペースの後に引数を指定することでも呼び出すことが可能です。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">charAt</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+<span class="n">res20</span><span class="k">:</span> <span class="kt">Char</span> <span class="o">=</span> <span class="n">o</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span> <span class="n">charAt</span> <span class="mi">2</span>
+<span class="n">res21</span><span class="k">:</span> <span class="kt">Char</span> <span class="o">=</span> <span class="n">o</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">charAt</span><span class="o">(</span><span class="mi">2</span><span class="o">)).</span><span class="n">toLong</span>
+<span class="n">res39</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">111</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">s</span> <span class="n">charAt</span> <span class="mi">2</span> <span class="n">toLong</span>
+<span class="n">res40</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">111</span>
+</pre></div>
+</div>
+<p>このような記述が許されているため、ScalaではDSLのように自然言語に近い形の記述ができるようになっているのです。</p>
+</div>
+<div class="section" id="id3">
+<h2>3.2.2. ファーストクラス関数<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>Scalaの関数は、ファーストクラスオブジェクトです。これは、関数をオブジェクトとして扱い、変数に&#8221;関数オブジェクト&#8221;を代入したり、関数の引数に&#8221;関数オブジェクト&#8221;を渡して呼び出し先の関数から&#8221;関数オブジェクト&#8221;を呼び出す、&#8221;関数オブジェクト&#8221;を生成する関数を定義する、などが可能になる、ということを意味します。</p>
+<p>具体的な例を見てみましょう。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">isEven</span><span class="o">(</span> <span class="n">n</span><span class="k">:</span><span class="kt">Int</span> <span class="o">)</span><span class="k">:</span><span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">}</span>
+<span class="n">isEven</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span><span class="kt">Boolean</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">func</span> <span class="k">=</span> <span class="n">isEven</span> <span class="k">_</span>
+<span class="n">func</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">func</span><span class="o">(</span> <span class="mi">3</span> <span class="o">)</span>
+<span class="n">res4</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span>
+</pre></div>
+</div>
+<p>最初に、&#8221;isEven&#8221;というInt型の引数を一つ取る関数を定義しています。</p>
+<p>次に、この関数の&#8221;関数オブジェクト&#8221;を、funcという変数に代入しています。
+関数名のあとにスペースを空けて、&#8221;_&#8221;(アンダースコア)を書くと、その関数のオブジェクトを取り出すことができるのです(正確には、部分適用された関数ですが)。</p>
+<p>最後に、func変数が保持している関数(実態はisEven関数)に引数3を渡して呼び出しています。</p>
+</div>
+<div class="section" id="id4">
+<h2>3.2.3. 関数の&#8221;型&#8221;<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>先ほどの例で、func変数に代入した際に、以下のように出力されました。この出力は何を表しているのでしょうか?</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">func</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>この&#8221;(Int) =&gt; Boolean&#8221;は、その関数の&#8221;型&#8221;を表しています。この表記の意味は、Int型の引数をひとつ取り、Boolean型の結果を返す関数であることを表現しているのです。</p>
+<p>IntとStringの二つの引数を取って、List[String]型の結果を返す関数は、&#8221;(Int,String) =&gt; List[String]となりますし、String型の引数を取って何も返さない(Unit型)関数は、&#8221;(String) =&gt; Unit&#8221;となります。</p>
+</div>
+<div class="section" id="id5">
+<h2>3.2.4. 関数を引数に取る関数<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>関数はオブジェクトですので、ある関数の引数に&#8221;関数&#8221;を渡すことができます。具体的には、どのように定義するのでしょうか。以下の例を見てください。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">boolean2String</span><span class="o">(</span> <span class="n">f</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span><span class="o">,</span>  <span class="n">n</span><span class="k">:</span><span class="kt">Int</span> <span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">if</span><span class="o">(</span> <span class="n">f</span><span class="o">(</span> <span class="n">n</span> <span class="o">)</span> <span class="o">)</span> <span class="s">&quot;偶数&quot;</span> <span class="k">else</span> <span class="s">&quot;奇数&quot;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>このboolean2String関数の引数の宣言に注目してください。第1引数が&#8221;f:(Int) =&gt; Boolean&#8221;と書かれています。
+これは「fという引数の型は(Int) =&gt; Booleanである。」という意味です。つまり第一引数fは、Int型の引数をひとつ取ってBoolean型の結果を返す関数オブジェクトである、ということになります。</p>
+<p>引数名の後の:(コロン)以降は、その引数の型を指定することを思い出してください。単純に、引数fの型を、先ほど説明した&#8221;関数の型&#8221;の表記で指定しているだけなのです。</p>
+<p>では、このboolean2Stringを呼び出してみましょう。以前に定義したisEven関数を第1引数に渡すことにします。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">func</span> <span class="k">=</span> <span class="n">isEven</span> <span class="k">_</span>
+<span class="n">func</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">boolean2String</span><span class="o">(</span> <span class="n">func</span> <span class="o">,</span>  <span class="mi">3</span> <span class="o">)</span>
+<span class="n">res6</span><span class="k">:</span> <span class="kt">java.lang.String</span> <span class="o">=</span> <span class="n">奇数</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">boolean2String</span><span class="o">(</span> <span class="n">isEven</span> <span class="k">_</span> <span class="o">,</span>  <span class="mi">3</span> <span class="o">)</span>
+<span class="n">res7</span><span class="k">:</span> <span class="kt">java.lang.String</span> <span class="o">=</span> <span class="n">奇数</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">boolean2String</span><span class="o">(</span> <span class="n">isEven</span>  <span class="o">,</span>  <span class="mi">3</span> <span class="o">)</span>
+<span class="n">res8</span><span class="k">:</span> <span class="kt">java.lang.String</span> <span class="o">=</span> <span class="n">奇数</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>3.2.5. 関数リテラル<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>先ほどの例では、一度&#8221;def&#8221;キーワードを利用してisEven関数を定義して、変数funcに代入するということを行いました。ただ、わざわざ名前をつけて定義するまでもない、使い捨ての関数をその場で定義したい場合もあるでしょう。関数の宣言と代入を、一度に行う方法はないのでしょうか?</p>
+<p>その答えが、関数リテラルです。文字列は、その場で&#8221;foo&#8221;のように生成できて、わざわざ&#8221;new String&#8221;aaa&#8221;)&#8221;なんて書きませんよね?
+これと同じことを、関数リテラルは実現します。</p>
+<p>関数リテラルは、このような書式で記述します。</p>
+<div class="highlight-scala"><pre>(引数1:型, 引数2:型, ･･･) =&gt; { 処理 }</pre>
+</div>
+<p>最初の()の中身は、defで関数を宣言する場合の引数の定義と同じです。
+その引数の宣言の()のあとに&#8221;=&gt;&#8221;(rocket-dashというらしいです)を書いて、その後に関数の具体的な処理を記述する形になります。</p>
+<p>結果型を宣言する必要はありません。結果型は、記述した処理の内容から型推論されるためです。</p>
+<p>具体例を見てましょう。以前定義したisEven関数を関数リテラルで変数fretに代入してみます。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">fret</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">(</span><span class="n">n</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">}</span>
+<span class="n">fret</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">fret</span> <span class="k">=</span> <span class="o">(</span><span class="n">n</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span>  <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="n">fret</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>この２つのコードは、どちらも同じことを行っています。
+最初の書き方は、きちんと変数fretの型が&#8221;(Int) =&gt; Boolean&#8221;型であることを宣言したうえで、 =の後に関数リテラルで引数nの値が偶数の場合Trueを返す&#8221;無名関数&#8221;をfretに代入しています。</p>
+<p>2番目の書き方は、引数fretの型の宣言を省略し(型推論されるので)、関数リテラルで無名関数を定義しています。関数本体が一行で収まる内容のため、さらに{}も省略してこのような形になっています。</p>
+<p>無名関数を受け取る左辺の変数に、&#8221;関数の型&#8221;が指定されている場合は、さらに関数リテラルで指定する引数の型指定を省略することができます。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">fret</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">(</span> <span class="n">n</span> <span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">}</span>
+<span class="n">fret</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">fret</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="n">n</span> <span class="k">=&gt;</span>  <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="n">fret</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>最初の書き方は、引数nの型指定が省略されていますね。2番目の書き方は、()と{}を省略したものです。このように、引数の型指定を書略する書き方は、関数の引数に関数リテラルで生成した関数を渡すときによく利用されます。</p>
+<p>さてここで、&#8221;1関数を引数に取る関数&#8221;としてboolean2String関数を作ったことを思い出してください。このboolean2String関数の引数に、関数リテラルで無名関数を渡すと、このような書き方になります。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">boolean2String</span><span class="o">(</span> <span class="o">(</span><span class="n">n</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">,</span>  <span class="mi">9</span> <span class="o">)</span>
+<span class="n">res11</span><span class="k">:</span> <span class="kt">java.lang.String</span> <span class="o">=</span> <span class="n">奇数</span>
+</pre></div>
+</div>
+<p>第1引数が、関数リテラルの形になっていることに注意して見てください。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">boolean2String</span><span class="o">(</span> <span class="n">n</span> <span class="k">=&gt;</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="n">res12</span><span class="k">:</span> <span class="kt">java.lang.String</span> <span class="o">=</span> <span class="n">奇数</span>
+</pre></div>
+</div>
+<p>この例は、関数リテラルの引数の型指定を省略したものです。かなり短くなりましたね。</p>
+<p>この記述は、この後説明する引数のプレースホルダーを利用することで、もっと短く書くことができるようになります。</p>
+<p>なお、ScalaのコレクションAPIは、関数を引数にとることが多いです。コレクションAPIを利用する際には、このように関数リテラルでその場で関数を定義して引数に渡すということがよく行われます。</p>
+</div>
+<div class="section" id="id7">
+<h2>3.2.6. 引数のプレースホルダー<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>defで関数を宣言するときも、関数リテラルを利用して無名関数を定義する際にも、引数は&#8221;引数名:型&#8221;の形になっていました。</p>
+<p>関数リテラルを利用して無名関数を定義するときに限り、この&#8221;引数名&#8221;の宣言すら省略することができるのです。</p>
+<p>引数名を省略したとしたら、関数本体ではどのように引数に渡された値を受け取ればよいのでしょうか?
+プレースホルダーを利用することで、&#8221;無名引数&#8221;とでもいうべき変数が利用できるようになるのです。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">fret</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="k">_</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="n">fret</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>この例は、プレースホルダーを利用して、引数名の宣言なしにisEven関数を定義したものです。以前はnという名前の引数担っていた部分が、&#8221;_&#8221;(アンダースコア)になっていますね。</p>
+<p>引数名を省略した場合は、変わりに&#8221;_&#8221;(アンダースコア)で渡された引数の値を受け取ることができるのです。</p>
+<p>引数が2つある関数はどうでしょうか? Int型の引数を2つとって、足し算した結果を返す関数を、プレースホルダーを利用して作成してみます。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">add</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">{</span> <span class="k">_</span> <span class="o">+</span> <span class="k">_</span> <span class="o">}</span>
+<span class="n">add</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span>  <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">add</span><span class="o">(</span> <span class="mi">7</span><span class="o">,</span>  <span class="mi">11</span> <span class="o">)</span>
+<span class="n">res12</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">18</span>
+</pre></div>
+</div>
+<p>引数が2つある場合でも、&#8221;_&#8221;(アンダースコア)を2つ書くことで、最初の&#8221;_&#8221;には1番目の引数が、次の&#8221;_&#8221;には2番目の引数が渡されます。</p>
+<p>さて、ここで引数をプレースホルダーで受け取る場合に注意しなければならないことが2つあります。</p>
+<ol class="arabic simple">
+<li>変数に代入する場合などは、受け取り側の変数には&#8221;関数の型&#8221;を指定する必要があります。
+先ほどの例では、add変数には型が指定されていました。</li>
+<li>関数本体の処理の中で、&#8221;_&#8221;を利用できるのは1回のみ。
+2つの引数をプレースホルダーで受ける場合を考えて見ると、2番目に登場した&#8221;_&#8221;には2番目の引数が入ります。&#8221;_&#8221;が登場するたびに、順番に引数が渡されていくのです。</li>
+</ol>
+<p>他にも、&#8221;_&#8221;が一意に特定できる状況でなければコンパイルエラーになります。</p>
+<p>実際に、このようなプレースホルダーを利用した無名関数は、どのような局面で利用されるのでしょうか?</p>
+<p>よく使われるのが、ScalaのコレクションAPIを利用する時に、関数を引数に取る関数を呼び出すときに、関数リテラルとプレースホルダーを利用した無名関数を引数として渡して呼び出す方法です。</p>
+<p>List型のfilter関数は、Boolean型を返す関数を受け取って、その関数を各要素に適用してtrueを返した要素を集めたListを返す関数です。
+以下の例は、List[String]型のListに対して、filter関数で「文字列の長さが2以上ならtrueを返す関数」を引数に渡して実行した例です。&#8221;_.length&#8221;は、String型のlengthメソッドを呼び出しているのです。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">l</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span> <span class="s">&quot;a&quot;</span><span class="o">,</span> <span class="s">&quot;bb&quot;</span><span class="o">,</span> <span class="s">&quot;ccc&quot;</span><span class="o">,</span> <span class="s">&quot;d&quot;</span><span class="o">,</span> <span class="s">&quot;ee&quot;</span><span class="o">,</span> <span class="s">&quot;fff&quot;</span><span class="o">)</span>
+<span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">java.lang.String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="n">a</span><span class="o">,</span>  <span class="n">bb</span><span class="o">,</span>  <span class="n">ccc</span><span class="o">,</span>  <span class="n">d</span><span class="o">,</span>  <span class="n">ee</span><span class="o">,</span>  <span class="n">fff</span><span class="o">)</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">l</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span> <span class="n">_</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">)</span>
+<span class="n">res13</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">java.lang.String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="n">bb</span><span class="o">,</span>  <span class="n">ccc</span><span class="o">,</span>  <span class="n">ee</span><span class="o">,</span>  <span class="n">fff</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>3.2.7. 高階関数とクロージャ<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id9">
+<h3>3.2.7.1. 「関数を生成する」関数<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>高階関数とは、関数を引数として受け取ったり、関数を生成して返す関数のことです。先ほど定義したboolean2String関数は関数を引数にもらいましたね?今度は、関数を生成する関数を定義してみましょう。</p>
+<p>例として、「Int型の引数nを取って、&#8221;文字列をn回繰り返す関数&#8221;を生成して返す」関数を作成してみます。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">repeat</span><span class="o">(</span> <span class="n">n</span><span class="k">:</span><span class="kt">Int</span> <span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="o">(</span> <span class="n">s</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span> <span class="k">=&gt;</span> <span class="n">s</span> <span class="o">*</span> <span class="n">n</span> <span class="o">}</span>
+<span class="n">repeat</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)(</span><span class="kt">String</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">String</span>
+</pre></div>
+</div>
+<p>これが、関数の定義です。{}で囲まれた部分が、関数リテラルになっていますね。このrepeat関数を呼び出すと、引数に与えた数だけ文字列を繰り返して返す関数が、戻り値として返されます。</p>
+<p>では、このrepeat関数を実際に利用してみましょう。以下の実行例を見てください。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">repeat3</span> <span class="k">=</span> <span class="n">repeat</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
+<span class="n">repeat3</span><span class="k">:</span> <span class="o">(</span><span class="kt">String</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">String</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">repeat3</span><span class="o">(</span> <span class="s">&quot;Foo&quot;</span> <span class="o">)</span>
+<span class="n">res7</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">FooFooFoo</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">repeat</span><span class="o">(</span> <span class="mi">4</span> <span class="o">)(</span><span class="s">&quot;Bar&quot;</span><span class="o">)</span>
+<span class="n">res8</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">BarBarBarBar</span>
+</pre></div>
+</div>
+<p>最初の呼び出しでは、repeat関数の引数に3を与えて、生成された「文字列を3回繰り返す関数」を変数repeat3に代入しています。次の呼び出して、変数repeat3に代入された関数を呼び出しています。変数に格納されている関数オブジェクトも、通常の関数呼び出しと同様に(引数)をつけて呼び出すことができることを思い出してください。</p>
+<p>最後の例は、repeat関数で生成された関数を変数に格納せず、その場で呼び出している例です。</p>
+</div>
+<div class="section" id="id10">
+<h3>3.2.7.2. クロージャ<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p>先ほどの例で使用したrepeat関数の本体の中で、生成される関数はrepeat関数に渡された引数を利用していました。</p>
+<p>ということは、repeat関数で生成された関数は、生成されたときに渡されたrepeat関数の引数を覚えていて、その後もずっと利用できることになります。</p>
+<p>このように、生成されたときに外部の変数(repeat関数の例では引数n)を取り込んで動作する関数のことを&#8221;クロージャ&#8221;といいます。Java7に入る入らないでモメた、アレのことです。</p>
+<p>そして、取り込まれる外部の変数のことを、自由変数といいます。</p>
+<p>以下の例は、引数で渡した文字列より長いものをString型を要素に持つリストから探して、どのくらい超えているかと合わせて表示する関数を返しています。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">printOverlength</span><span class="o">(</span> <span class="n">s</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">len</span> <span class="k">=</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span>
+
+  <span class="o">(</span><span class="n">xs</span><span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    <span class="k">for</span><span class="o">(</span> <span class="n">e</span> <span class="k">&lt;-</span> <span class="n">xs</span> <span class="o">;</span><span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="n">len</span> <span class="o">){</span>
+      <span class="n">println</span><span class="o">(</span> <span class="n">e</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span><span class="n">len</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>この例ですと、lenが自由変数になり、List[String]を受け取ってfor式で繰り返し処理をしている部分がクロージャということになります。実行例は、以下の通りです。</p>
+<div class="highlight-scala"><pre>scala&gt; val printOverFoo = printOverlength( "Foo" )
+printOverFoo: (List[String]) =&gt; Unit = &lt;function&gt;
+
+scala&gt; printOverFoo( List( "Bar", "Baaaaz", "Aaa", "Hoge") )
+Baaaaz:3
+Hoge:1</pre>
+</div>
+<p>実は、このprintOverlength関数は、もう少し短く書くことができます。余裕があったら、どのようになるか考えてみるとよいでしょう。</p>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>3.2.8. ネストした関数<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<p>Javaでは、メソッドの中でメソッドを宣言することはできませんでした(匿名クラスを定義することはできますが)。Scalaでは、関数の処理の中で、関数を宣言することができます。</p>
+<p>例を見てみましょう。これは、String型を要素に持つListの各要素を、指定した文字列が含んでいたら&#8221;アリ&#8221;、含まないなら&#8221;ナシ&#8221;という文字列に変換したListを返す関数です。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">containsOfString</span><span class="o">(</span> <span class="n">xs</span><span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">],</span> <span class="n">s</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">convert</span><span class="o">(</span> <span class="n">e</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span> <span class="k">=</span>
+    <span class="k">if</span><span class="o">(</span> <span class="n">e</span> <span class="n">contains</span> <span class="n">s</span> <span class="o">)</span> <span class="s">&quot;アリ&quot;</span> <span class="k">else</span> <span class="s">&quot;ナシ &quot;</span>
+
+  <span class="k">for</span><span class="o">(</span> <span class="n">e</span> <span class="k">&lt;-</span> <span class="n">xs</span> <span class="o">)</span> <span class="k">yield</span> <span class="o">{</span> <span class="n">convert</span><span class="o">(</span> <span class="n">e</span> <span class="o">)</span> <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>関数の内部で、defキーワードを利用してconvert関数を定義しています。このconvert関数は、実は自由変数としてcontainsOfString関数に渡された引数sを取り込んだ、クロージャになっています。</p>
+<p>以下は実行結果です。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">containsOfString</span><span class="o">(</span> <span class="nc">List</span><span class="o">(</span><span class="s">&quot;Foooo&quot;</span><span class="o">,</span> <span class="s">&quot;AFoo&quot;</span><span class="o">,</span> <span class="s">&quot;Booo&quot;</span><span class="o">)</span> <span class="o">,</span>  <span class="s">&quot;Foo&quot;</span> <span class="o">)</span>
+<span class="n">res19</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">java.lang.String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="n">アリ</span><span class="o">,</span>  <span class="n">アリ</span><span class="o">,</span>  <span class="n">ナシ</span> <span class="o">)</span>
+</pre></div>
+</div>
+<p>ちなみに、このcontainsOfString関数ですが、for式を使わないで以下のように書くこともできます。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">containsOfString</span> <span class="k">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">map</span><span class="o">{</span> <span class="n">e</span> <span class="k">=&gt;</span> <span class="k">if</span><span class="o">(</span> <span class="n">e</span> <span class="n">contains</span> <span class="n">s</span> <span class="o">)</span> <span class="s">&quot;アリ&quot;</span> <span class="k">else</span> <span class="s">&quot;ナシ&quot;</span> <span class="o">}</span>
+</pre></div>
+</div>
+<p>List型(正確には&#8221;Iterable型&#8221;)が持つmap関数に変換する無名関数を渡しています。for式で処理するより、関数のレシーバーが走査対象のListオブジェクトになっている分、何に対してどのような操作を適用するのかが明確になるため、筆者はこのような書き方の方が好みです。</p>
+</div>
+<div class="section" id="id12">
+<h2>3.2.9. 再帰する関数<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="scala">
+<h3>3.2.9.1. Scalaでの再帰関数<a class="headerlink" href="#scala" title="Permalink to this headline">¶</a></h3>
+<p>再帰といえば、関数の中で自身を再度呼び出すことです。再帰からの脱出条件を間違えてStackOverflowを引き起こした経験を皆さんお持ちでしょう。</p>
+<p>もちろん、Scalaでも関数を再帰で呼び出すことができます。むしろ、関数型言語の考え方として可能な限り再帰で書く方がよいとされています。</p>
+<p>では、例として、自然数の階乗n!を計算する関数を定義します。以下の例を見てください。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">factorial</span><span class="o">(</span> <span class="n">n</span><span class="k">:</span><span class="kt">BigInt</span><span class="o">)</span><span class="k">:</span><span class="kt">BigInt</span>  <span class="o">=</span>
+  <span class="k">if</span><span class="o">(</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial</span><span class="o">(</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>このfactorial関数は、nの値を1づつ減らしながら、nが1になるまで自身を再帰で呼び出していることがわかると思います。また、factorial関数は結果型がIntであると明示してます。
+結果型を宣言しない場合は、&#8221;error: recursive method factorial needs result type&#8221;と、再帰する関数は結果型を明示するようコンパイラに求められます。</p>
+<p>では、1から10までの階乗を計算させてみましょう。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="o">).</span><span class="n">foreach</span><span class="o">(</span> <span class="n">n</span> <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span> <span class="n">factorial</span><span class="o">(</span> <span class="n">n</span> <span class="o">)</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span><span class="o">))</span>
+<span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">24</span><span class="o">,</span> <span class="mi">120</span><span class="o">,</span> <span class="mi">720</span><span class="o">,</span> <span class="mi">5040</span><span class="o">,</span> <span class="mi">40320</span><span class="o">,</span> <span class="mi">362880</span><span class="o">,</span> <span class="mi">3628800</span><span class="o">,</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id13">
+<h3>3.2.9.2. 末尾再帰による最適化<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<p>再帰を扱う場合、呼び出しのたびにスタックフレームを生成するため実行効率がわるい、StackOverflowを発生させないよう呼び出し階層が深くならないよう注意深くプログラミングする必要があるなど、様々なことを考える必要があります。</p>
+<p>Scalaで再帰を行った場合、やはりStackOverflowが発生してしまうのでしょうか?</p>
+<p>以下の例は、1からnまでの和を計算する関数です。(先ほどの階乗の例だと扱う数値が大きくなりすぎるので)
+一発で計算することもできるのですが、例ですのであえて再帰を使っています。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">add</span><span class="o">(</span> <span class="n">n</span><span class="k">:</span><span class="kt">Long</span> <span class="o">)</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span> <span class="k">if</span><span class="o">(</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">n</span> <span class="o">+</span> <span class="n">add</span><span class="o">(</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">)</span>
+<span class="n">add</span><span class="k">:</span> <span class="o">(</span><span class="kt">Long</span><span class="o">)</span><span class="kt">Long</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">add</span><span class="o">(</span> <span class="mi">10</span> <span class="o">)</span>
+<span class="n">res0</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">55</span>
+</pre></div>
+</div>
+<p>では、大きな数を与えて再帰回数が多くなるようにしてみましょう。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">add</span><span class="o">(</span> <span class="mi">10000</span> <span class="o">)</span>
+<span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="nc">StackOverflowError</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">console</span><span class="o">&gt;:</span><span class="mi">12</span><span class="o">)</span>
+  <span class="n">at</span> <span class="o">.</span><span class="n">add</span><span class="o">(&lt;</span><span class="n">con</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>やはりStackOverflowが発生してしまいました。やはり再帰を扱うのは難しいのでしょうか?</p>
+<p>しかし、Scalaには末尾再帰の最適化という機能があります。この機能により、関数本体の最後の計算が自分自身を再帰で呼び出している場合に限り、コンパイラが実行時にはwhileループで実装したようなバイトコードを生成してくれるのです。</p>
+<p>つまり、末尾再帰になっている関数は、StackOverflowが発生しないのです。</p>
+<p>先ほどのadd関数は、計算の最後が、&#8221;n + add( n - 1 )&#8221;でした。これは、add関数を呼び出した後に結果をnと加算しているので、末尾再帰ではありません。</p>
+<p>では、add関数を末尾再帰になるように書き直してみます。
+以下のコードを見てください。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">add</span><span class="o">(</span> <span class="n">n</span><span class="k">:</span><span class="kt">Long</span> <span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">calc</span><span class="o">(</span> <span class="n">sum</span><span class="k">:</span><span class="kt">Long</span><span class="o">,</span> <span class="n">m</span><span class="k">:</span><span class="kt">Long</span> <span class="o">)</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span>
+    <span class="k">if</span><span class="o">(</span> <span class="n">m</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="o">)</span> <span class="n">sum</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">calc</span><span class="o">(</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">m</span> <span class="o">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">)</span>
+  <span class="n">calc</span><span class="o">(</span> <span class="n">n</span> <span class="o">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">)</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>これが末尾再帰版のadd関数です。add関数自体は再帰されていないのですが、内部でcalcという作業用の関数を用意して、このcalc関数が再帰するようになっています。calc関数の最後は、自身呼び出していますね。</p>
+<p>早速試してみましょう。書き換える前のadd関数はn=10000でStackOverflowが発生していました。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">add</span><span class="o">(</span> <span class="mi">10000</span> <span class="o">)</span>
+<span class="n">res5</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">50005000</span>
+</pre></div>
+</div>
+<p>ちゃんと計算できましたね!n=10000000でも、すぐに結果が帰ってきます。</p>
+<p>このように、Scalaで再帰を扱う場合は末尾再帰になるようにするのが基本です。add関数を書き直したときのように、場合によっては処理の中で作業用の関数を用意し、その作業用関数を末尾再帰にするというのはよく使われるテクニックなのです。</p>
+</div>
+</div>
+<div class="section" id="id14">
+<h2>3.2.10. 部分適用とカリー化<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id15">
+<h3>3.2.10.1. 部分適用された関数<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<p>2つの文字列を引数でもらい、重複する文字のみを取り出した文字列を返す関数を考えてみます。次のような関数です。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">findDuplicateChar</span><span class="o">(</span> <span class="n">s1</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">s2</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span> <span class="k">=</span>
+  <span class="o">(</span><span class="k">for</span><span class="o">(</span> <span class="n">c1</span> <span class="k">&lt;-</span> <span class="n">s1</span><span class="o">;</span> <span class="n">c2</span> <span class="k">&lt;-</span> <span class="n">s2</span> <span class="k">if</span> <span class="n">c1</span> <span class="o">==</span> <span class="n">c2</span> <span class="o">)</span> <span class="k">yield</span> <span class="o">{</span> <span class="n">c1</span> <span class="o">})</span> <span class="n">mkString</span>
+</pre></div>
+</div>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">findDuplicateChar</span><span class="o">(</span><span class="s">&quot;abcdefg&quot;</span><span class="o">,</span> <span class="s">&quot;bdfghijk&quot;</span><span class="o">)</span>
+<span class="n">res34</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">bdfg</span>
+</pre></div>
+</div>
+<p>このfindDuplicateChar関数に対して、第1引数の文字は同じで、第2引数の文字を変えて繰り返し実行するとします。
+このときに、第1引数を固定した状態にできると便利ですよね。</p>
+<p>Scalaでは、関数の部分適用という形でこれを実現できます。
+以下のように、通常の関数呼び出しのなかで、固定したい引数を与え、可変にしたい引数を&#8221;_ :型&#8221;にすることで、与えた引数で固定された関数オブジェクトを得ることができます。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">val</span> <span class="n">paf</span> <span class="k">=</span> <span class="n">findDuplicateChar</span><span class="o">(</span> <span class="s">&quot;aBcdeFghIjKLmNOPqrsTuVWxyZ&quot;</span><span class="o">,</span>  <span class="k">_</span> <span class="k">:</span><span class="kt">String</span> <span class="o">)</span>
+</pre></div>
+</div>
+<p>&#8220;_&#8221; と&#8221;:&#8221;の間はスペースが必要なことに注意しましょう。</p>
+<p>やってみましょう。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">l</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span> <span class="s">&quot;abc&quot;</span><span class="o">,</span><span class="s">&quot;def&quot;</span><span class="o">,</span><span class="s">&quot;ghi&quot;</span><span class="o">,</span><span class="s">&quot;jkl&quot;</span><span class="o">,</span><span class="s">&quot;mno&quot;</span><span class="o">,</span><span class="s">&quot;pqr&quot;</span><span class="o">,</span><span class="s">&quot;stu&quot;</span><span class="o">,</span><span class="s">&quot;vwx&quot;</span><span class="o">)</span>
+<span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">java.lang.String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="n">abc</span><span class="o">,</span> <span class="k">def</span><span class="o">,</span> <span class="n">ghi</span><span class="o">,</span> <span class="n">jkl</span><span class="o">,</span> <span class="n">mno</span><span class="o">,</span> <span class="n">pqr</span><span class="o">,</span> <span class="n">stu</span><span class="o">,</span> <span class="n">vwx</span><span class="o">)</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">paf</span> <span class="k">=</span> <span class="n">findDuplicateChar</span><span class="o">(</span> <span class="s">&quot;aBcdeFghIjKLmNOPqrsTuVWxyZ&quot;</span><span class="o">,</span> <span class="k">_</span> <span class="k">:</span><span class="kt">String</span> <span class="o">)</span>
+<span class="n">paf</span><span class="k">:</span> <span class="o">(</span><span class="kt">String</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">String</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">for</span><span class="o">(</span> <span class="n">s</span> <span class="k">&lt;-</span> <span class="n">l</span> <span class="o">){</span> <span class="n">println</span><span class="o">(</span> <span class="n">paf</span><span class="o">(</span> <span class="n">s</span> <span class="o">)</span> <span class="o">)}</span>
+<span class="n">ac</span>
+<span class="n">de</span>
+<span class="n">gh</span>
+<span class="n">j</span>
+<span class="n">m</span>
+<span class="n">qr</span>
+<span class="n">su</span>
+<span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id16">
+<h3>3.2.10.2. カリー化<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<p>カリー化とは、複数の引数をとる関数を、引数が「もとの関数の最初の引数」で戻り値が「もとの関数の残りの引数を取り結果を返す関数」に変換することをいいます。</p>
+<p>具体的には、3つの引数を取って加算する関数があったとして、一つ目の引数を与えると、2引数を取って加算した結果を最初に与えた引数に加えて返す&#8221;関数&#8221;が返ります。</p>
+<p>具体的に見てみましょう。以下は、カリー化された3つのIntを加算する関数です。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">curriedSum</span><span class="o">(</span> <span class="n">n</span><span class="k">:</span><span class="kt">Int</span> <span class="o">)(</span> <span class="n">m</span><span class="k">:</span><span class="kt">Int</span> <span class="o">)(</span> <span class="n">i</span><span class="k">:</span><span class="kt">Int</span> <span class="o">)</span> <span class="k">=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">m</span> <span class="o">+</span> <span class="n">i</span>
+</pre></div>
+</div>
+<p>Scalaでは、引数宣言の()を複数書くことができ、これですでにcurriedSum関数はカリー化されています。
+では、どのように呼び出すのでしょうか。利用例は以下の通りです。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="n">curriedSum</span><span class="o">(</span> <span class="mi">10</span> <span class="o">)(</span> <span class="mi">11</span> <span class="o">)(</span> <span class="mi">12</span> <span class="o">)</span>
+<span class="n">res37</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">33</span>
+</pre></div>
+</div>
+<p>呼び出すときも、宣言されている()と同じだけ(引数)を渡せばよいわけです。</p>
+<p>では、1番目の引数を与えて、「もとの関数の残りの引数を取り結果を返す関数」を得るにはどのようにするとよいのでしょうか?
+関数名に対してスペースを空けて&#8221;_&#8221;を指定することで関数オブジェクトを取り出すことができました。これと同じようにすればよいのです。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">cf</span> <span class="k">=</span> <span class="n">curriedSum</span><span class="o">(</span> <span class="mi">10</span> <span class="o">)(</span> <span class="mi">11</span> <span class="o">)</span> <span class="k">_</span>
+<span class="n">cf</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">cf</span><span class="o">(</span> <span class="mi">12</span> <span class="o">)</span>
+<span class="n">res39</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">33</span>
+</pre></div>
+</div>
+<p>変数cfには、ちゃんと10 + 11 に引数を加えて返す関数が入っていますね。</p>
+</div>
+</div>
+<div class="section" id="id17">
+<h2>3.2.11. 可変長引数<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<p>Javaでは可変長の引数を取るメソッドを定義することができました。Scalaでも可能です。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">printString</span><span class="o">(</span> <span class="n">args</span><span class="k">:</span><span class="kt">String</span> <span class="kt">*</span> <span class="o">)</span><span class="k">=</span> <span class="k">for</span><span class="o">(</span> <span class="n">s</span> <span class="k">&lt;-</span> <span class="n">args</span> <span class="o">){</span> <span class="n">print</span><span class="o">(</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">)}</span>
+<span class="n">printString</span><span class="k">:</span> <span class="o">(</span><span class="kt">String*</span><span class="o">)</span><span class="kt">Unit</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">printString</span><span class="o">(</span> <span class="s">&quot;aaa&quot;</span><span class="o">,</span> <span class="s">&quot;bbb&quot;</span><span class="o">,</span> <span class="s">&quot;ccc&quot;</span> <span class="o">)</span>
+<span class="n">aaa</span><span class="k">:</span><span class="kt">bbb:ccc:</span>
+</pre></div>
+</div>
+<p>定義の仕方は簡単で、可変にしたい引数の型指定のあとに、スペースを空けて&#8221;*&#8221;をつけるだけです。これで、printString関数は複数個の文字列を取ることができるようになりました。</p>
+<p>受け取り側の関数の内部では、引数argsはArray[String]型になります。</p>
+<p>配列を可変長引数を取る関数に対して展開して与えたい場合は、以下のように呼び出します。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">array</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="s">&quot;aaa&quot;</span><span class="o">,</span> <span class="s">&quot;bbb&quot;</span><span class="o">,</span> <span class="s">&quot;ccc&quot;</span><span class="o">)</span>
+<span class="n">array</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">java.lang.String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="n">aaa</span><span class="o">,</span>  <span class="n">bbb</span><span class="o">,</span>  <span class="n">ccc</span><span class="o">)</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">printString</span><span class="o">(</span> <span class="n">ar</span><span class="k">:</span> <span class="k">_</span> <span class="kt">*</span> <span class="o">)</span>
+<span class="n">aaa</span><span class="k">:</span><span class="kt">bbb:ccc:</span>
+</pre></div>
+</div>
+<p>展開したい配列を引数に与えるときには、&#8221;: _*&#8221;をつけて呼び出します。&#8221;:&#8221;と&#8221;_*&#8221;の間はスペースが必要なことに注意してください。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="classes.html" title="3.3. クラス、オブジェクト、トレイト"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="basic.html" title="3.1. 基本的な文法"
+             >previous</a> |</li>
+        <li><a href="../index.html">Scala hack-a-thon #1 v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >3. Scalaの基本</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Tomohito Ozaki.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

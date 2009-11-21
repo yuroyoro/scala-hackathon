@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Scalaの基本 &mdash; Scala hack-a-thon #1 v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Scala hack-a-thon #1 v1.0 documentation" href="../index.html" />
+    <link rel="next" title="3.1. 基本的な文法" href="basic.html" />
+    <link rel="prev" title="2. Scalaの開発スタイル" href="../how_to_develop.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="basic.html" title="3.1. 基本的な文法"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../how_to_develop.html" title="2. Scalaの開発スタイル"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Scala hack-a-thon #1 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="../how_to_develop.html"
+                                  title="previous chapter">2. Scalaの開発スタイル</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="basic.html"
+                                  title="next chapter">3.1. 基本的な文法</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/basic/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="scala">
+<h1>3. Scalaの基本<a class="headerlink" href="#scala" title="Permalink to this headline">¶</a></h1>
+<p>ここでは、Scalaの基本的な文法や関数の使い方、クラスやオブジェクトの定義、パターンマッチなどを取り上げます。</p>
+<p>これから説明する内容は、ぜひScalaインタプリタでサンプルコードを入力して動作を確認しながら読んでみてください。</p>
+<p>なお、文中に「したほうがよい。」「が推奨される。」などの記述がありますが、一部筆者の私見が混ざっている可能性があることをご了承ください。</p>
+<p>また、筆者がJava言語を得意とするプログラマのため、視点がJavaよりになっている点も、合わせてご容赦願いますm(＿)m。</p>
+<p>Contents:</p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="basic.html">3.1. 基本的な文法</a><ul>
+<li class="toctree-l2"><a class="reference external" href="basic.html#id2">3.1.1. 変数</a></li>
+<li class="toctree-l2"><a class="reference external" href="basic.html#id4">3.1.2. 制御構造</a></li>
+<li class="toctree-l2"><a class="reference external" href="basic.html#id7">3.1.3. 関数</a></li>
+<li class="toctree-l2"><a class="reference external" href="basic.html#id9">3.1.4. 型推論</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="function.html">3.2. 関数編</a><ul>
+<li class="toctree-l2"><a class="reference external" href="function.html#id2">3.2.1. 関数の呼び出し</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id3">3.2.2. ファーストクラス関数</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id4">3.2.3. 関数の&#8221;型&#8221;</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id5">3.2.4. 関数を引数に取る関数</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id6">3.2.5. 関数リテラル</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id7">3.2.6. 引数のプレースホルダー</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id8">3.2.7. 高階関数とクロージャ</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id11">3.2.8. ネストした関数</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id12">3.2.9. 再帰する関数</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id14">3.2.10. 部分適用とカリー化</a></li>
+<li class="toctree-l2"><a class="reference external" href="function.html#id17">3.2.11. 可変長引数</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="classes.html">3.3. クラス、オブジェクト、トレイト</a><ul>
+<li class="toctree-l2"><a class="reference external" href="classes.html#id2">3.3.1. クラスの宣言</a></li>
+<li class="toctree-l2"><a class="reference external" href="classes.html#id3">3.3.2. シングルトンオブジェクト</a></li>
+<li class="toctree-l2"><a class="reference external" href="classes.html#id4">3.3.3. コンパニオンオブジェクト</a></li>
+<li class="toctree-l2"><a class="reference external" href="classes.html#id5">3.3.4. コンストラクタについてもっと詳しく</a></li>
+<li class="toctree-l2"><a class="reference external" href="classes.html#id8">3.3.5. 継承するクラス</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="patternmatching.html">3.4. ケースクラスとパターンマッチ</a><ul>
+<li class="toctree-l2"><a class="reference external" href="patternmatching.html#id2">3.4.1. パターンマッチの基本</a></li>
+<li class="toctree-l2"><a class="reference external" href="patternmatching.html#id3">3.4.2. ケースクラス</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="basic.html" title="3.1. 基本的な文法"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../how_to_develop.html" title="2. Scalaの開発スタイル"
+             >previous</a> |</li>
+        <li><a href="../index.html">Scala hack-a-thon #1 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Tomohito Ozaki.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

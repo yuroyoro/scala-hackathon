@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6.1.3. Scalaっぽくリファクタリングする &mdash; Scala hack-a-thon #1 v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Scala hack-a-thon #1 v1.0 documentation" href="../index.html" />
+    <link rel="up" title="6.1. シンプルな画像ビューワー" href="imageviewer.html" />
+    <link rel="next" title="6.2. Echoサーバー" href="echoserver.html" />
+    <link rel="prev" title="6.1.2. クリックすると画像表示ウィンドウを表示させる" href="imageviewer2.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="echoserver.html" title="6.2. Echoサーバー"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imageviewer2.html" title="6.1.2. クリックすると画像表示ウィンドウを表示させる"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Scala hack-a-thon #1 v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >6. サンプルアプリケーション</a> &raquo;</li>
+          <li><a href="imageviewer.html" accesskey="U">6.1. シンプルな画像ビューワー</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">6.1.3. Scalaっぽくリファクタリングする</a><ul>
+<li><a class="reference external" href="#trait-imageicon-window">6.1.3.1. traitの導入 ImageIconの生成やWindow周りを共通化</a></li>
+<li><a class="reference external" href="#mouseevent-trait">6.1.3.2. MouseEvent処理をtraitに</a></li>
+<li><a class="reference external" href="#id1">6.1.3.3. 完成版のソースコード</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="imageviewer2.html"
+                                  title="previous chapter">6.1.2. クリックすると画像表示ウィンドウを表示させる</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="echoserver.html"
+                                  title="next chapter">6.2. Echoサーバー</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/sample/imageviewer3.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="scala">
+<h1>6.1.3. Scalaっぽくリファクタリングする<a class="headerlink" href="#scala" title="Permalink to this headline">¶</a></h1>
+<p>ここまで、画像ビューワーとしては完成しましたが、プログラム自体はどちらかというとJavaのコードをScalaに置き換えただけのように見えます。もう少しだけ、Scalaの特徴を生かしたプログラムになるようにリファクタリングしてみます。</p>
+<div class="section" id="trait-imageicon-window">
+<h2>6.1.3.1. traitの導入 ImageIconの生成やWindow周りを共通化<a class="headerlink" href="#trait-imageicon-window" title="Permalink to this headline">¶</a></h2>
+<p>ThumbWindowとViewWindowクラスには、ImageIconの生成やウィンドウサイズの設定など、共通化出来そうな処理があります。ここを、traitを導入して共通化させてみましょう。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">trait</span> <span class="nc">ImageWindow</span> <span class="k">extends</span> <span class="nc">JFrame</span><span class="o">{</span>
+  <span class="k">val</span> <span class="n">w</span><span class="k">:</span><span class="kt">Int</span>
+  <span class="k">val</span> <span class="n">h</span><span class="k">:</span><span class="kt">Int</span>
+  <span class="k">val</span> <span class="n">t</span><span class="k">:</span><span class="kt">String</span>
+
+  <span class="k">val</span> <span class="n">pane</span> <span class="k">=</span> <span class="n">getContentPane</span>
+
+  <span class="k">def</span> <span class="n">open</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="n">setSize</span><span class="o">(</span> <span class="n">w</span><span class="o">,</span> <span class="n">h</span> <span class="o">)</span>
+    <span class="n">setTitle</span><span class="o">(</span> <span class="n">t</span> <span class="o">)</span>
+    <span class="n">setVisible</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">def</span> <span class="n">createIcon</span><span class="o">(</span> <span class="n">file</span><span class="k">:</span><span class="kt">File</span> <span class="o">)(</span> <span class="n">f</span><span class="k">:</span><span class="o">(</span><span class="kt">BufferedImage</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Image</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">icon</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ImageIcon</span>
+    <span class="k">val</span> <span class="n">image</span> <span class="k">=</span> <span class="nc">ImageIO</span><span class="o">.</span><span class="n">read</span><span class="o">(</span> <span class="n">file</span> <span class="o">)</span>
+
+    <span class="n">icon</span><span class="o">.</span><span class="n">setImage</span><span class="o">(</span> <span class="n">f</span><span class="o">(</span><span class="n">image</span><span class="o">)</span> <span class="o">)</span>
+    <span class="o">(</span><span class="n">icon</span> <span class="o">,</span> <span class="n">image</span> <span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>ImageWindowというtraitを定義しました。このtraitは、JFrameを継承しています。</p>
+<p>抽象変数として、w, h, tを持っています。これは、ウィンドウの幅と高さとタイトルを表しており
+このtraitを実装するクラスで値を設定する必要がある変数です。</p>
+<p>そして、これらの変数を利用してウィンドウのタイトルや大きさを設定するopen関数があります。</p>
+<p>ImageIconを生成する処理として、createIcon関数を作成しました。この関数はカリー化されており、第一引数は画像ファイル、第二引数はBufferedImageを変換する関数を受け取ります。</p>
+<p>結果型は、ImageIconオブジェクトとImageオブジェクトのタプルです。</p>
+<p>具体的な利用方法を見てみましょう。以下のコードは、ThumbWindowの中で、foreachを利用してサムネイル画像を作成している処理です。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">imageFiles</span><span class="o">(</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span> <span class="s">&quot;./images&quot;</span> <span class="o">)</span> <span class="o">).</span><span class="n">foreach</span><span class="o">{</span> <span class="n">f</span> <span class="k">=&gt;</span>
+  <span class="k">val</span> <span class="o">(</span><span class="n">icon</span><span class="o">,</span> <span class="n">image</span> <span class="o">)</span> <span class="k">=</span> <span class="n">createIcon</span><span class="o">(</span> <span class="n">f</span> <span class="o">){</span> <span class="n">image</span> <span class="k">=&gt;</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">getScaledInstance</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span><span class="mi">100</span><span class="o">,</span> <span class="nc">Image</span><span class="o">.</span><span class="nc">SCALE_AREA_AVERAGING</span><span class="o">)</span>
+  <span class="o">}</span>
+</pre></div>
+</div>
+<p>以前に比べてずいぶんすっきりしましたね。{}を使って、createIcon関数の第二引数に渡す関数オブジェクトを関数リテラルの形で定義していることに注意してください。</p>
+</div>
+<div class="section" id="mouseevent-trait">
+<h2>6.1.3.2. MouseEvent処理をtraitに<a class="headerlink" href="#mouseevent-trait" title="Permalink to this headline">¶</a></h2>
+<p>このアプリケーションでは、マウスイベントを処理する箇所が3箇所あります。ThumbWindowでクリックされるとアプリケーションを終了し、JLabelのサムネイル画像をクリックするとViewWindowを生成し、ViewWindowをクリックするとウィンドウを閉じる、以上の箇所です。</p>
+<p>これらのイベント処理は、コンポーネントに対してaddMouseListenerでMouseAdapterの匿名サブクラスを追加する形になっています。</p>
+<p>クリックされた時の処理を切り出すことが出来れば、MouseAdapterの登録は共通化できそうです。幸い、Scalaでは処理を関数リテラルを利用してオブジェクトとして渡すことができるようになっています。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">trait</span> <span class="nc">ClickEventHandler</span> <span class="k">extends</span> <span class="nc">Component</span><span class="o">{</span>
+
+  <span class="k">val</span> <span class="n">handle</span><span class="k">:</span> <span class="o">()=&gt;</span> <span class="nc">Unit</span>
+  <span class="n">addMouseListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">MouseAdapter</span><span class="o">(){</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">mouseClicked</span><span class="o">(</span><span class="n">e</span><span class="k">:</span><span class="kt">MouseEvent</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="n">handle</span><span class="o">()</span> <span class="o">}</span>
+  <span class="o">})</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>これが、マウスイベントを処理したいコンポーネントが継承するClickEventHandlerです。addMouseListenerはComponentクラスが持っているので、このtraitもComponentクラスを継承しています。</p>
+<p>このtraitには抽象変数handleが定義されています。このhandle変数は、マウスクリックイベントを処理する関数オブジェクトを、traitを実装するクラス側で定義しておくことで、addMouseListenerに渡すMouseAdapterの匿名クラスから利用しています。</p>
+<p>このtraitを実装するクラスはどのようになるのでしょうか? サムネイル画像をクリックしたときのJLabelの処理を見てみましょう。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">val</span> <span class="n">label</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">JLabel</span><span class="o">(</span> <span class="n">icon</span> <span class="o">)</span> <span class="k">with</span> <span class="nc">ClickEventHandler</span><span class="o">{</span>
+  <span class="k">val</span> <span class="n">handle</span> <span class="k">=</span> <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span><span class="k">new</span> <span class="nc">ViewWindow</span><span class="o">(</span> <span class="n">f</span> <span class="o">);</span> <span class="o">()</span> <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>JLabelの匿名サブクラスを生成するときに、withキーワードでClickEventHandlerを継承させています
+。
+この匿名サブクラスに、クロージャとして抽象変数handleにViewWindowを生成する処理を実装することで、明示的にaddMouseListenerでイベントハンドラーを登録せずともクリック時の処理が行われるようになりました。</p>
+</div>
+<div class="section" id="id1">
+<h2>6.1.3.3. 完成版のソースコード<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>2つのtraitを導入してリファクタリングした結果が、以下のコードです。</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">import</span> <span class="nn">java.io.</span><span class="o">{</span><span class="nc">File</span><span class="o">,</span><span class="nc">FileFilter</span> <span class="o">}</span>
+<span class="k">import</span> <span class="nn">java.awt.event._</span>
+<span class="k">import</span> <span class="nn">java.awt.</span><span class="o">{</span><span class="nc">Component</span><span class="o">,</span> <span class="nc">Toolkit</span><span class="o">,</span> <span class="nc">Image</span><span class="o">,</span><span class="nc">FlowLayout</span> <span class="o">}</span>
+<span class="k">import</span> <span class="nn">java.awt.image.BufferedImage</span>
+<span class="k">import</span> <span class="nn">javax.swing.</span><span class="o">{</span><span class="nc">ImageIcon</span><span class="o">,</span> <span class="nc">JWindow</span><span class="o">,</span> <span class="nc">JLabel</span><span class="o">,</span> <span class="nc">JFrame</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">javax.imageio.ImageIO</span>
+
+<span class="k">import</span> <span class="nn">scala.collection.jcl.Conversions._</span>
+
+<span class="k">object</span> <span class="nc">ImageViewer</span> <span class="k">extends</span> <span class="nc">Application</span><span class="o">{</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">w</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ThumbWindow</span>
+<span class="o">}</span>
+
+<span class="k">trait</span> <span class="nc">ImageWindow</span> <span class="k">extends</span> <span class="nc">JFrame</span><span class="o">{</span>
+  <span class="k">val</span> <span class="n">w</span><span class="k">:</span><span class="kt">Int</span>
+  <span class="k">val</span> <span class="n">h</span><span class="k">:</span><span class="kt">Int</span>
+  <span class="k">val</span> <span class="n">t</span><span class="k">:</span><span class="kt">String</span>
+
+  <span class="k">val</span> <span class="n">pane</span> <span class="k">=</span> <span class="n">getContentPane</span>
+
+  <span class="k">def</span> <span class="n">open</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="n">setSize</span><span class="o">(</span> <span class="n">w</span><span class="o">,</span> <span class="n">h</span> <span class="o">)</span>
+    <span class="n">setTitle</span><span class="o">(</span> <span class="n">t</span> <span class="o">)</span>
+    <span class="n">setVisible</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">def</span> <span class="n">createIcon</span><span class="o">(</span> <span class="n">file</span><span class="k">:</span><span class="kt">File</span> <span class="o">)(</span> <span class="n">f</span><span class="k">:</span><span class="o">(</span><span class="kt">BufferedImage</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Image</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">icon</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ImageIcon</span>
+    <span class="k">val</span> <span class="n">image</span> <span class="k">=</span> <span class="nc">ImageIO</span><span class="o">.</span><span class="n">read</span><span class="o">(</span> <span class="n">file</span> <span class="o">)</span>
+
+    <span class="n">icon</span><span class="o">.</span><span class="n">setImage</span><span class="o">(</span> <span class="n">f</span><span class="o">(</span><span class="n">image</span><span class="o">)</span> <span class="o">)</span>
+    <span class="o">(</span><span class="n">icon</span> <span class="o">,</span> <span class="n">image</span> <span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">trait</span> <span class="nc">ClickEventHandler</span> <span class="k">extends</span> <span class="nc">Component</span><span class="o">{</span>
+
+  <span class="k">val</span> <span class="n">handle</span><span class="k">:</span> <span class="o">()=&gt;</span> <span class="nc">Unit</span>
+  <span class="n">addMouseListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">MouseAdapter</span><span class="o">(){</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">mouseClicked</span><span class="o">(</span><span class="n">e</span><span class="k">:</span><span class="kt">MouseEvent</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span> <span class="n">handle</span><span class="o">()</span> <span class="o">}</span>
+  <span class="o">})</span>
+<span class="o">}</span>
+
+<span class="k">class</span> <span class="nc">ThumbWindow</span> <span class="k">extends</span> <span class="nc">ImageWindow</span> <span class="k">with</span> <span class="nc">ClickEventHandler</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">handle</span> <span class="k">=</span> <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span><span class="nc">System</span><span class="o">.</span><span class="n">exit</span><span class="o">(</span> <span class="mi">0</span> <span class="o">)}</span>
+  <span class="k">val</span> <span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">h</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span> <span class="s">&quot;Image Viewer&quot;</span><span class="o">,</span> <span class="mi">640</span><span class="o">,</span> <span class="mi">420</span> <span class="o">)</span>
+
+  <span class="k">val</span> <span class="n">filePattern</span>  <span class="k">=</span> <span class="s">&quot;&quot;&quot;.*\.(png|jpg|gif)$&quot;&quot;&quot;</span><span class="o">.</span><span class="n">r</span>
+
+  <span class="k">def</span> <span class="n">imageFiles</span><span class="o">(</span> <span class="n">dir</span><span class="k">:</span><span class="kt">File</span> <span class="o">)</span> <span class="k">=</span> <span class="n">dir</span><span class="o">.</span><span class="n">listFiles</span><span class="o">{</span>
+    <span class="k">new</span> <span class="nc">FileFilter</span><span class="o">{</span>
+      <span class="k">def</span> <span class="n">accept</span><span class="o">(</span> <span class="n">f</span><span class="k">:</span><span class="kt">File</span> <span class="o">)</span> <span class="k">=</span> <span class="n">f</span><span class="o">.</span><span class="n">getName</span> <span class="k">match</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="n">filePattern</span><span class="o">(</span> <span class="k">_</span> <span class="o">)</span> <span class="k">=&gt;</span> <span class="kc">true</span>
+        <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="kc">false</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="n">pane</span><span class="o">.</span><span class="n">setLayout</span><span class="o">(</span> <span class="k">new</span> <span class="nc">FlowLayout</span><span class="o">()</span> <span class="o">)</span>
+
+  <span class="n">imageFiles</span><span class="o">(</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span> <span class="s">&quot;./images&quot;</span> <span class="o">)</span> <span class="o">).</span><span class="n">foreach</span><span class="o">{</span> <span class="n">f</span> <span class="k">=&gt;</span>
+    <span class="k">val</span> <span class="o">(</span><span class="n">icon</span><span class="o">,</span> <span class="n">image</span> <span class="o">)</span> <span class="k">=</span> <span class="n">createIcon</span><span class="o">(</span> <span class="n">f</span> <span class="o">){</span> <span class="n">image</span> <span class="k">=&gt;</span>
+      <span class="n">image</span><span class="o">.</span><span class="n">getScaledInstance</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span><span class="mi">100</span><span class="o">,</span> <span class="nc">Image</span><span class="o">.</span><span class="nc">SCALE_AREA_AVERAGING</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="k">val</span> <span class="n">label</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">JLabel</span><span class="o">(</span> <span class="n">icon</span> <span class="o">)</span> <span class="k">with</span> <span class="nc">ClickEventHandler</span><span class="o">{</span>
+      <span class="k">val</span> <span class="n">handle</span> <span class="k">=</span> <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span><span class="k">new</span> <span class="nc">ViewWindow</span><span class="o">(</span> <span class="n">f</span> <span class="o">);</span> <span class="o">()</span> <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">label</span><span class="o">.</span><span class="n">setSize</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">)</span>
+    <span class="n">pane</span><span class="o">.</span><span class="n">add</span><span class="o">(</span> <span class="n">label</span> <span class="o">)</span>
+
+  <span class="o">}</span>
+  <span class="n">open</span>
+<span class="o">}</span>
+
+<span class="k">class</span> <span class="nc">ViewWindow</span><span class="o">(</span> <span class="n">file</span><span class="k">:</span><span class="kt">File</span> <span class="o">)</span> <span class="k">extends</span> <span class="nc">ImageWindow</span>
+  <span class="k">with</span> <span class="nc">ClickEventHandler</span><span class="o">{</span>
+    <span class="k">val</span> <span class="o">(</span><span class="n">icon</span><span class="o">,</span> <span class="n">image</span> <span class="o">)</span> <span class="k">=</span> <span class="n">createIcon</span><span class="o">(</span> <span class="n">file</span> <span class="o">){</span> <span class="n">image</span> <span class="k">=&gt;</span> <span class="n">image</span> <span class="o">}</span>
+
+  <span class="k">val</span> <span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">h</span> <span class="o">)</span><span class="k">=</span> <span class="o">(</span> <span class="n">file</span><span class="o">.</span><span class="n">getName</span><span class="o">,</span> <span class="n">image</span><span class="o">.</span><span class="n">getWidth</span><span class="o">,</span> <span class="n">image</span><span class="o">.</span><span class="n">getHeight</span> <span class="o">)</span>
+  <span class="k">val</span> <span class="n">handle</span> <span class="k">=</span>  <span class="n">dispose</span> <span class="k">_</span>
+
+  <span class="n">pane</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">JLabel</span><span class="o">(</span><span class="n">icon</span><span class="o">))</span>
+  <span class="n">open</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>これでこの画像ビューワーアプリケーションは完成ですが、余裕があれば皆さんで機能追加をしてみてください。例えば、こんなことが考えられます。</p>
+<ul class="simple">
+<li>サムネイルと一緒に画像ファイル名も表示する</li>
+<li>FileChooserなどで、任意のディレクトリを表示できるようにする</li>
+<li>表示した画像を回転や反転できるようにする</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="echoserver.html" title="6.2. Echoサーバー"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imageviewer2.html" title="6.1.2. クリックすると画像表示ウィンドウを表示させる"
+             >previous</a> |</li>
+        <li><a href="../index.html">Scala hack-a-thon #1 v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >6. サンプルアプリケーション</a> &raquo;</li>
+          <li><a href="imageviewer.html" >6.1. シンプルな画像ビューワー</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Tomohito Ozaki.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>
