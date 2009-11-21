@@ -13,9 +13,9 @@ Applicationトレイトを利用する
 
 .. code-block:: scala
 
-object ImageViewer extends Application{
-  println( "Image Viewer " )
-}
+  object ImageViewer extends Application{
+    println( "Image Viewer " )
+  }
 
 ここまで、コンパイルして実行すると、メッセージが表示されるはずです。
 
