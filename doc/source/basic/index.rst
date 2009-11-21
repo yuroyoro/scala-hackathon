@@ -17,5 +17,6 @@ Contents:
    basic.rst
    function.rst
    classes.rst
+   trait.rst
    patternmatching.rst
 

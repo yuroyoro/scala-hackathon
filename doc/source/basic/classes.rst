@@ -175,8 +175,61 @@ PersonクラスやFooクラスのコンストラクタ引数の定義の方法�
 
 しかし、通常のクラスでは、コンストラクタ引数をクラスのメンバ変数に代入して保持しておくことが多いでしょう。
 
+コンストラクタ引数を指定する際に、以下のようにvalキーワードやvarキーワードを付与することで、引数名と同じプロパティがpublicで追加されます。valの場合は読み取り専用、varの場合は読み込みと書き込みが可能です。
 
+.. code-block:: scala
+
+  scala> class Employee( val name:String, var dept:String )
+  defined class Employee
+
+  scala> val e = new Employee( "Ozaki" ,"Development" )
+  e: Employee = Employee@2295aedf
+
+  scala> e.name
+  res19: String = Ozaki
+
+  scala> e.dept = "Sales"
+
+アクセス修飾子として、protectedなどをつけることもできます。
 
 
 継承するクラス
 ___________________________
+
+クラスは、Javaのクラスと同じように継承させることが可能です。通常通り、extendsキーワードを指定することで他のクラスを継承できます。
+
+.. code-block:: scala
+
+  scala> class Guitar( val scale:Int , val name:String )                                           defined class Guitar
+
+  scala> class AcousticGuitar( scale:Int , name:String ) extends Guitar( scale ,  name )
+  defined class AcousticGuitar
+
+コンストラクタ引数の指定に注意する必要があります。Guitarクラスはコンストラクタ引数を二つ取るため、継承先のクラスではextendsキーワードのあとにスーパークラスのコンストラクタに値を渡す必要があります。これは、スーパークラスのコンストラクタ呼び出しを行うためです。
+
+
+抽象クラス、finalクラス
+___________________________
+
+abstractキーワードで抽象クラスを宣言することが出来ます。また、finalキーワードでクラスが継承できないことを指定可能です。
+
+抽象クラスは抽象メソッドを持つことができます。抽象メソッドは、=以降の関数の本体を書かないことで宣言します。
+
+先ほどのGuitarクラスを抽象クラスにして、メンバ関数を追加した例が以下です。
+
+.. code-block:: scala
+
+  scala> abstract class Guitar( val scale:Int ,val name:String ){
+       |   def openNote( stringNumber:Int )
+       | }
+  defined class Guitar
+
+  scala> class AcousticGuitar( scale:Int ,name:String ) extends Guitar( scale , name ){            |  override def openNote( stringNumber:Int ) =
+       |    List("E","B","G","D","A","E")( stringNumber - 1 )
+       | }
+  defined class AcousticGuitar
+
+スーパークラスのメソッドをオーバーライドする場合は、サブクラス側ではoverrideキーワードを指定しなければなりません。Javaでいう@overrideと似ていますが、Scalaの場合はoverrideキーワードが指定されていないとコンパイルエラーとなります。
+
+なお、メンバ関数やフィールドに対してもfinalキーワードでサブクラスでのオーバーライドを禁止する指定ができます。
+
