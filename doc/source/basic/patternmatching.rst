@@ -39,12 +39,11 @@ instanceOfでswitch-caseさせるイメージだと思ってください。
 
 .. code-block:: scala
 
-  scala> def numberCheck( n:AnyVal ) = n match {
-       |   case b:Boolean => println( "boolean" )
-       |   case i:Int => println( "int" )
-       |   case _ => println("other")
-       | }
-  numberCheck: (AnyVal)Unit
+  def numberCheck( n:AnyVal ) = n match {
+    case b:Boolean => println( "boolean" )
+    case i:Int => println( "int" )
+    case _ => println("other")
+  }
 
   scala> numberCheck( true )
   boolean
@@ -58,12 +57,11 @@ instanceOfでswitch-caseさせるイメージだと思ってください。
 
 .. code-block:: scala
 
-  scala> def numberCheck( n:AnyVal ) = n match {
-       |   case b:Boolean => println( "boolean" )
-       |   case i:Int if i >= 0 => println( "int" )
-       |   case _ => println("other")
-       | }
-  numberCheck: (AnyVal)Unit
+  def numberCheck( n:AnyVal ) = n match {
+    case b:Boolean => println( "boolean" )
+    case i:Int if i >= 0 => println( "int" )
+    case _ => println("other")
+  }
 
   scala> numberCheck( true )
   boolean
@@ -83,12 +81,11 @@ instanceOfでswitch-caseさせるイメージだと思ってください。
 
 .. code-block:: scala
 
-  scala> def numberCheck( n:AnyVal ) = n match {
-       |   case b:Boolean => println( "boolean:" + b)
-       |   case i:Int if i >= 0 => println( "int:" + i)
-       |   case x => println("other:" + x)
-       | }
-  numberCheck: (AnyVal)Unit
+  def numberCheck( n:AnyVal ) = n match {
+    case b:Boolean => println( "boolean:" + b)
+    case i:Int if i >= 0 => println( "int:" + i)
+    case x => println("other:" + x)
+  }
 
   scala> numberCheck( true )
   boolean:true

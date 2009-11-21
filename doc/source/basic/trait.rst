@@ -139,11 +139,11 @@ Bの実装が継承されています。これは、traitの継承関係が直�
 
 .. code-block:: scala
 
-scala>   class C extends A with B with T
-<console>:18: error: illegal inheritance; superclass S
- is not a subclass of the superclass T
- of the mixin trait B
-         class C extends A with B with T
+  scala>   class C extends A with B with T
+  <console>:18: error: illegal inheritance; superclass S
+   is not a subclass of the superclass T
+   of the mixin trait B
+           class C extends A with B with T
 
 これは、AとBの継承先のクラスが異なるためです。ここで、クラスTが抽象クラスではなく、traitになっている場合はエラーは発生しません。あくまで、具象クラスまたは抽象クラスを継承するtraitの場合です。
 
