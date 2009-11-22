@@ -1,5 +1,4 @@
 import java.io.{File,FileFilter }
-   echoserver.rst
 import java.awt.{Image,FlowLayout }
 import java.awt.image.BufferedImage
 import javax.swing.{ImageIcon, JWindow, JLabel}
