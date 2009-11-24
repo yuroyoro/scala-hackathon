@@ -169,6 +169,7 @@ whileによる繰り返し
   var count = 0
   while( count <= 10 ){
     println( count )
+    var count = count + 1
   }
 
 whileによる繰り返しは、varでの再代入可能な変数を条件に利用することが多く、できる限りvalを利用してプログラミングするというscalaの思想にはそぐわない場合があります。

@@ -89,7 +89,7 @@ Scalaでは、このダイヤモンド継承問題に対して、Mix-inという
 
 .. code-block:: scala
 
-  abstract clsss S { def m:String }
+  abstract class S { def m:String }
   trait A extends S { override def m:String = "A" }
   trait B extends S { override def m:String = "B" }
   class C extends A with B

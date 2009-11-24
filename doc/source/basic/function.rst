@@ -486,7 +486,7 @@ Scalaでは、関数の部分適用という形でこれを実現できます。
 
   val paf = findDuplicateChar( "aBcdeFghIjKLmNOPqrsTuVWxyZ",  _ :String )
 
-"_" と":"の間はスペースが必要なことに注意しましょう。
+"_" と":"の間はスペースをあけておくと読みやすくなります。
 
 やってみましょう。
 

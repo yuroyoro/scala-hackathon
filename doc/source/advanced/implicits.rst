@@ -42,12 +42,14 @@ Implicit Conversion (暗黙の型変換)とは、ある型から別の型への�
 このように、Long型の変数timeに、Date型のオブジェクトを代入してもエラーになりません。これは、代入の際にdate2Long関数が呼び出された結果なのです。
 
 
+
+
 既存のオブジェクトに機能を追加する
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 先ほどの例は、単純な値の変換でしたが、Implicit Conversionを利用すると、あたかも既存のオブジェクトに新しい関数を追加させているかのようなことができます。
 
-では、java.util.Data型に、日本語表記の時刻を返すjpDate関数を追加する、ということをImplict Conversionを利用してやってみようと思います。
+では、java.util.Data型に、日本語表記の時刻を返すjpDate関数を追加する、ということをImplicit Conversionを利用してやってみようと思います。
 
 .. code-block:: scala
 
@@ -63,17 +65,46 @@ Implicit Conversion (暗黙の型変換)とは、ある型から別の型への�
 
 これは、Date型をラップするJpDateクラスを定義し、日本語の時刻を返すjpdate関数を追加しています。次に、Date型をJpDate型に変換する関数をimplicit defで定義します。
 
-これで、Date型に対してjpdate関数を呼び出してみましょう。本来、Data型にはjpdateなんて関数は無いのでコンパイルエラーになるはずですよね?
+これで、Date型に対してjpdate関数を呼び出してみましょう。本来、Date型にはjpdateなんて関数は無いのでコンパイルエラーになるはずですよね?
 
 .. code-block:: scala
+
   scala> (new Date ).jpdate
   res40: String = 2009年53年22日01時53分45秒
 
 ちゃんと動いています。あたかもDate型に新しい関数が追加されたようにみえますね。
+実際は、コンパイラがDate型に対するjpdate関数の呼び出しに、ここはJpDate型を要求しているものと推論して、date2JpDate関数を呼び出してImplicit Conversionを行っているのです。
+
+実は、ScalaでもInt型に存在しない関数(例えばtoHexString関数など)を呼び出した時には、RichInt型へImplicit Conversionを利用して変換しています。
+
+
+.. code-block:: scala
+
+  scala> val i = 100
+  i: Int = 100
+
+  scala> i.toHexString
+  res48: String = 64
+
+このRichWrapperへの変換関数は、scala.PreDefオブジェクトに実装されています。scala.PreDefオブジェクトに定義された関数はデフォルトでimportされるので、意識しなくてもRichWrapper型への変換を利用できるのです。
+
+Implicit Conversionの注意点
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Implicit Conversionは、うまく使えば強力な機能なのですが、暗黙のうちに型を変換するので思わぬ副作用をプログラムに及ぼす可能性があります。
+
+ただし、Implicit Conversionが行われるのは、変換が行われる箇所内のスコープにimplicit defが存在する場合に限ります。
+
+適切なスコープにimplicit defを定義またはimportすることで、副作用の影響範囲を局所化できるので、定義するスコープは慎重に選択して利用すべきです。
+
+また、変換関数の実装にもよるのですが、たいていは新しいオブジェクトを生成して変換するので、パフォーマンスへの影響も多少はあります。
+
+加えて、変換対象となるクラスは、イミュータブルなオブジェクトに限定すべきです。変換したあとのオブジェクトに対して変更しても、もとのオブジェクトは変更されない、ということが起こりえるからです。
 
 
 
-
-implicit Parameter(暗黙の引数)
+Implicit Parameter(暗黙の引数)
 ________________________________________
 
+次は、Implicit Parameter(暗黙の引数)についての解説です。
+Implict Conversionと名前は似ていますが、
