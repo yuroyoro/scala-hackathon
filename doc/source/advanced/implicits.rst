@@ -106,5 +106,39 @@ Implicit Conversionは、うまく使えば強力な機能なのですが、暗�
 Implicit Parameter(暗黙の引数)
 ________________________________________
 
+デフォルト:wa
+
+
+
 次は、Implicit Parameter(暗黙の引数)についての解説です。
-Implict Conversionと名前は似ていますが、
+Implict Conversionと名前は似ていますが、機能としては異なります。
+
+一言でImplict Parameterを説明するとすれば、「引数の型に適したデフォルト引数を自動的に選択する仕組み」と言えそうです。
+
+では、具体的にどのような動作をするかと言うと、"implicit val"と宣言されている変数がスコープ内に存在する際に、引数の宣言で"implicit"が付与された引数を省略することが可能です。
+
+「暗黙の引数」の名前通り、"implicit val"で宣言された変数は、"implicit"が付与されている関数の引数に、自動的に渡されるのです。
+
+さっそくコードを見てみましょう。
+
+.. code-block:: scala
+
+  scala> def addPrefix( xs:List[String])(implicit prefix:String) = xs.map( prefix + _ )
+  addPrefix: (List[String])(implicit String)List[java.lang.String]
+
+  scala> implicit val pre = "Prefix_"
+  pre: java.lang.String = Prefix_
+
+  scala> addPrefix( List( "foo","bar","baz") )
+  res0: List[java.lang.String] = List(Prefix_foo, Prefix_bar, Prefix_baz)
+
+addPrefix関数は、List[String]型の引数xsの各要素に、引数prefixで受けた文字列を先頭に付与したListを返す関数です。このaddPrefix関数は、カリー化された状態で宣言されています。
+
+２番目の引数をよく見てください。通常の引数の宣言の前に、"implicit"キーワードが付与されていますこれは、この第２引数は呼び出し側のスコープに"implicit val"で宣言されている変数が存在する場合は省略可能であることを示します。
+
+次に、addPrefix関数を呼び出す前に、"implict val"で暗黙のうちに引数として渡したい値を宣言します。この場合は、"Prefix_"という文字列にしています。
+
+この状態で、addPrefix関数の第2引数を省略した形で呼び出すと、第2引数に"Prefix_"が引き渡されている場合と同じ結果が得られます。"implicit val"による引数が暗黙のうちにaddPrefix関数に渡された結果です。
+
+さて、このaddPrefix関数ですが、明示的に第2引数を渡して呼び出すことも可能です。"implicit val"による引数は、あくまで第2引数を省略した場合にのみ機能します。
+
