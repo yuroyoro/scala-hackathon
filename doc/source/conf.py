@@ -37,7 +37,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Scala hack-a-thon #1'
+project = u'Scala hack-a-thon'
 copyright = u'2009, Tomohito Ozaki'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -158,7 +158,7 @@ html_static_path = ['_static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Scala-hack-a-thon-1doc'
+htmlhelp_basename = 'Scala-hack-a-thon-doc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -172,7 +172,7 @@ htmlhelp_basename = 'Scala-hack-a-thon-1doc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Scala-hack-a-thon-1.tex', u'Scala hack-a-thon \\#1 Documentation',
+  ('index', 'Scala-hack-a-thon.tex', u'Scala hack-a-thon Documentation',
    u'Tomohito Ozaki', 'manual'),
 ]
 

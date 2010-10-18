@@ -11,3 +11,4 @@ Contents:
 
    imageviewer.rst
    echoserver.rst
+   markov.rst

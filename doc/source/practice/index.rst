@@ -13,5 +13,7 @@ Contents:
    gui.rst
    networing.rst
    loanpattern.rst
+   lift.rst
+   play.rst
 
 
